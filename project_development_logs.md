@@ -44,6 +44,19 @@
 - Generated simulated live previews demonstrating how dynamic system numbers (8% CPU, 55% RAM, 8% GPU) render cleanly on top.
 - Updated index.html interactive catalog with a dedicated featured showcase banner and direct download links.
 
+## Multi-Theme Architecture & GTA VI / Vice City (GTX 6) Icon Suite
+- Partitioned output asset repository into two dedicated theme domains under output/themes/:
+  1. Theme 1 (SimForge): Industrial forged steel, fiery molten amber glow, and cockpit simulator controls.
+  2. Theme 2 (GTA VI / Vice City): Sun-soaked Vice City neon sunset aesthetic with twilight indigo, neon magenta, and sunset gold.
+- Created generate_gta6_icon_pack.py script generating 40 bespoke GTA VI Stream Deck icons across two key pillars:
+  - Pillar 1 (Gaming - 24 Icons): Engine ignition, high beams, nitro boost, handbrake drift, Vice radio, cinematic cam, VTOL gear, door lock, weapon wheel, pistol sidearm, assault rifle, sniper scope, sticky C4, heavy armor, snack heal, clear wanted, iFruit phone, interaction menu (M), GPS waypoint, heist loot, cyber hack, hands up RP, mask on/off, and clip snapshot.
+  - Pillar 2 (Streaming - 16 Icons): Starting soon scene, live gameplay scene, chatting scene, BRB scene, ending scene, mic mute, headphone deafen, Discord voice, music track, soundboard SFX, voice FX, go live / end stream, replay 30s buffer, facecam toggle, highlight marker, and chat moderation shield.
+- Rendered every icon in three formats: physical keycaps (186x186 px), 2x High-DPI keycaps (372x372 px), and isolated transparent vector glyphs (32-bit RGBA).
+- Created custom GTA VI Vice City Sunset Telemetry Widget Background (458x196 px) with 2x version and simulated live preview.
+- Authored comprehensive documentation manual GTA6_ICON_PACK_GUIDE.md detailing color codes, icon use cases, recommended keybinds/macros, OBS WebSocket integration, and Stream Deck layout blueprints (15-key and 32-key).
+- Updated interactive HTML catalog (output/index.html) with dynamic dual-theme switcher tabs and asset download controls.
+
+
 
 
 

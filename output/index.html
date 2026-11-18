@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SimForge Industrial Stream Deck: Asset Catalog</title>
+  <title>SimForge & GTA VI Stream Deck Icon Suites</title>
   <style>
     :root {
-      --bg: #0d0f12;
-      --card-bg: #16191f;
-      --border: #262c36;
-      --accent-orange: #ff8c00;
-      --accent-blue: #00bfff;
-      --accent-green: #32cd32;
-      --accent-pink: #ff1493;
+      --bg: #0d0f14;
+      --card-bg: #151821;
+      --border: #252b38;
       --text-main: #f0f3f6;
       --text-muted: #8b949e;
+      --sim-orange: #ff8c00;
+      --sim-fire: #ff4500;
+      --gta-pink: #d82276;
+      --gta-cyan: #00f0ff;
+      --gta-gold: #ffa044;
+      --gta-purple: #2d124d;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -25,7 +27,7 @@
       line-height: 1.5;
     }
     header {
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       padding-bottom: 20px;
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -36,72 +38,85 @@
     }
     h1 {
       font-size: 26px;
-      color: var(--text-main);
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    h1 span {
-      background: linear-gradient(135deg, #ff8c00, #ff4500);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .theme-nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
     }
-    .stats-badge {
-      font-size: 13px;
-      color: var(--accent-orange);
-      background: rgba(255, 140, 0, 0.1);
-      border: 1px solid rgba(255, 140, 0, 0.3);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-family: monospace;
+    .tab-btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active.sim {
+      background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 69, 0, 0.1));
+      border-color: var(--sim-orange);
+      color: var(--sim-orange);
+    }
+    .tab-btn.active.gta {
+      background: linear-gradient(135deg, rgba(216, 34, 118, 0.25), rgba(255, 160, 68, 0.15));
+      border-color: var(--gta-pink);
+      color: #ff55a3;
+    }
+    .theme-content {
+      display: none;
+    }
+    .theme-content.active {
+      display: block;
     }
     .section-title {
-      font-size: 18px;
-      margin: 35px 0 15px 0;
-      color: var(--accent-blue);
+      font-size: 17px;
+      margin: 30px 0 15px 0;
       display: flex;
       align-items: center;
       gap: 8px;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
+    .sim-title { color: var(--sim-orange); }
+    .gta-title { color: var(--gta-pink); }
     .featured-banner {
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    .featured-banner.sim {
       background: linear-gradient(135deg, rgba(255, 69, 0, 0.15), rgba(255, 140, 0, 0.05));
-      border: 1px solid rgba(255, 140, 0, 0.4);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
+      border: 1px solid rgba(255, 140, 0, 0.35);
     }
-    .overview-container {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    .overview-container img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    .featured-banner.gta {
+      background: linear-gradient(135deg, rgba(45, 18, 77, 0.6), rgba(216, 34, 118, 0.15));
+      border: 1px solid rgba(216, 34, 118, 0.4);
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 18px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 25px;
     }
     .wide-grid {
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     }
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -110,411 +125,649 @@
     }
     .card:hover {
       transform: translateY(-2px);
-      border-color: var(--accent-orange);
     }
+    .card.sim:hover { border-color: var(--sim-orange); }
+    .card.gta:hover { border-color: var(--gta-pink); }
     .preview-box {
       width: 100%;
-      height: 140px;
+      height: 130px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #0a0b0e;
+      background: #090a0e;
       border-radius: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       position: relative;
       overflow: hidden;
     }
     .preview-box.wide {
-      height: 160px;
+      height: 155px;
     }
     .preview-box.checker {
-      background: repeating-conic-gradient(#1a1e24 0% 25%, #0f1216 0% 50%) 50% / 16px 16px;
+      background: repeating-conic-gradient(#1a1e24 0% 25%, #0f1216 0% 50%) 50% / 14px 14px;
     }
     .preview-box img {
-      max-width: 95%;
-      max-height: 95%;
+      max-width: 90%;
+      max-height: 90%;
       object-fit: contain;
     }
     .card-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-main);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .card-meta {
-      font-size: 11px;
+      font-size: 10px;
       font-family: monospace;
       color: var(--text-muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .btn-group {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       margin-top: auto;
       flex-wrap: wrap;
       justify-content: center;
     }
     .download-link {
-      font-size: 11px;
-      color: var(--accent-blue);
+      font-size: 10px;
       text-decoration: none;
-      padding: 4px 10px;
-      border: 1px solid rgba(0, 191, 255, 0.3);
+      padding: 4px 8px;
       border-radius: 4px;
-      transition: background 0.15s ease;
+      transition: opacity 0.15s ease;
     }
-    .download-link:hover {
-      background: rgba(0, 191, 255, 0.15);
-    }
-    .download-link.featured {
+    .sim-btn {
       color: #fff;
       background: linear-gradient(135deg, #ff8c00, #ff4500);
-      border-color: #ff8c00;
       font-weight: 600;
     }
-    .download-link.featured:hover {
-      opacity: 0.9;
+    .gta-btn {
+      color: #fff;
+      background: linear-gradient(135deg, #d82276, #ffa044);
+      font-weight: 600;
+    }
+    .sec-btn {
+      color: #8b949e;
+      border: 1px solid var(--border);
+    }
+    .sec-btn:hover { color: #fff; }
+    .guide-banner {
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 12px 18px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <h1>SimForge <span>Stream Deck Asset Suite</span></h1>
-      <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
-        Custom Fire Metal widget backgrounds, marked panel HUD, isolated icon glyphs, and high-DPI stream deck templates.
+      <h1>Stream Deck <span>Multi-Theme Asset Suite</span></h1>
+      <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">
+        Curated icon packs, high-DPI keycaps, and custom 458x196 px system telemetry widget backgrounds.
       </p>
     </div>
-    <div class="stats-badge">Exact 458x196 px Widget Backgrounds Ready to Use</div>
   </header>
 
-  <!-- FEATURED: 458x196 SIMFORGE FIRE METAL WIDGET BACKGROUNDS -->
-  <div class="featured-banner">
-    <h2 style="font-size: 18px; color: var(--accent-orange); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-      🔥 458 x 196 SimForge Fire Metal Widget Backgrounds
-    </h2>
-    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
-      Designed specifically for your CPU / RAM / GPU monitor widget where numbers change dynamically. Select any of these background files in your Stream Deck software.
-    </p>
+  <!-- THEME SELECTOR TABS -->
+  <div class="theme-nav">
+    <button class="tab-btn active gta" onclick="switchTheme('gta')">
+      🌴 Theme 2: GTA VI / Vice City (GTX 6) - Gaming & Streaming Pack (40 Icons)
+    </button>
+    <button class="tab-btn sim" onclick="switchTheme('sim')">
+      🔥 Theme 1: SimForge Industrial Gaming Channel Theme
+    </button>
+  </div>
 
-    <div class="grid wide-grid">
-      <!-- Variant 1 -->
-      <div class="card">
-        <div class="preview-box wide">
-          <img src="simforge_widget_backgrounds/01_simforge_fire_metal_molten_forge_458x196.png" alt="Molten Forge Edition">
-        </div>
-        <div class="card-title">1. Molten Forge Edition (Recommended)</div>
-        <div class="card-meta">Exact 458 x 196 px | Glowing Anvil Badge & Fire Metal Rim</div>
-        <div class="btn-group">
-          <a class="download-link featured" href="simforge_widget_backgrounds/01_simforge_fire_metal_molten_forge_458x196.png" download>Download 458x196</a>
-          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/01_simforge_fire_metal_molten_forge_458x196_2x.png" download>2x Hi-DPI</a>
-          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_01_simforge_fire_metal_molten_forge_458x196.png" target="_blank">Simulated Live</a>
-        </div>
+  <!-- ============================================================== -->
+  <!-- THEME 2: GTA VI / VICE CITY (GTX 6) -->
+  <!-- ============================================================== -->
+  <div id="theme-gta" class="theme-content active">
+    <div class="guide-banner">
+      <div>
+        <strong>GTA VI Icon Pack Manual Available:</strong> Detailed documentation covering keybinds, macros, OBS WebSocket actions, and Stream Deck blueprints.
       </div>
+      <a class="download-link gta-btn" href="../GTA6_ICON_PACK_GUIDE.md" target="_blank">Open Full Guide</a>
+    </div>
 
-      <!-- Variant 2 -->
-      <div class="card">
-        <div class="preview-box wide">
-          <img src="simforge_widget_backgrounds/02_simforge_fire_metal_brand_banner_458x196.png" alt="Brand Banner Edition">
-        </div>
-        <div class="card-title">2. Full Brand Banner Edition</div>
-        <div class="card-meta">Exact 458 x 196 px | Full SimForge Wordmark Header</div>
-        <div class="btn-group">
-          <a class="download-link featured" href="simforge_widget_backgrounds/02_simforge_fire_metal_brand_banner_458x196.png" download>Download 458x196</a>
-          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/02_simforge_fire_metal_brand_banner_458x196_2x.png" download>2x Hi-DPI</a>
-          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_02_simforge_fire_metal_brand_banner_458x196.png" target="_blank">Simulated Live</a>
-        </div>
-      </div>
-
-      <!-- Variant 3 -->
-      <div class="card">
-        <div class="preview-box wide">
-          <img src="simforge_widget_backgrounds/03_simforge_fire_metal_hardware_icons_458x196.png" alt="Hardware Icons Edition">
-        </div>
-        <div class="card-title">3. Molten Hardware Icons Edition</div>
-        <div class="card-meta">Exact 458 x 196 px | Wireframe Chip, RAM & Fan Glyphs</div>
-        <div class="btn-group">
-          <a class="download-link featured" href="simforge_widget_backgrounds/03_simforge_fire_metal_hardware_icons_458x196.png" download>Download 458x196</a>
-          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/03_simforge_fire_metal_hardware_icons_458x196_2x.png" download>2x Hi-DPI</a>
-          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_03_simforge_fire_metal_hardware_icons_458x196.png" target="_blank">Simulated Live</a>
-        </div>
-      </div>
-
-      <!-- Variant 4 -->
-      <div class="card">
-        <div class="preview-box wide">
-          <img src="simforge_widget_backgrounds/04_simforge_fire_metal_clean_forge_458x196.png" alt="Clean Industrial Forge">
-        </div>
-        <div class="card-title">4. Clean Industrial Forge Edition</div>
-        <div class="card-meta">Exact 458 x 196 px | Intense Molten Seam & Maximum Contrast</div>
-        <div class="btn-group">
-          <a class="download-link featured" href="simforge_widget_backgrounds/04_simforge_fire_metal_clean_forge_458x196.png" download>Download 458x196</a>
-          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/04_simforge_fire_metal_clean_forge_458x196_2x.png" download>2x Hi-DPI</a>
-          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_04_simforge_fire_metal_clean_forge_458x196.png" target="_blank">Simulated Live</a>
-        </div>
-      </div>
-
-      <!-- Variant 5 -->
-      <div class="card">
-        <div class="preview-box wide">
-          <img src="simforge_widget_backgrounds/05_simforge_fire_metal_panel_remaster_458x196.png" alt="Original Panel Remaster">
-        </div>
-        <div class="card-title">5. Original Hardware Remaster</div>
-        <div class="card-meta">Exact 458 x 196 px | Sourced from Stream Deck Panel Screen</div>
-        <div class="btn-group">
-          <a class="download-link featured" href="simforge_widget_backgrounds/05_simforge_fire_metal_panel_remaster_458x196.png" download>Download 458x196</a>
-          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/05_simforge_fire_metal_panel_remaster_458x196_2x.png" download>2x Hi-DPI</a>
-          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_05_simforge_fire_metal_panel_remaster_458x196.png" target="_blank">Simulated Live</a>
+    <!-- GTA VI 458x196 Telemetry Background -->
+    <div class="featured-banner gta">
+      <h2 style="font-size: 17px; color: var(--gta-pink); margin-bottom: 6px;">
+        🌴 458 x 196 GTA VI Vice City Sunset Telemetry Widget Background
+      </h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+        Features the iconic Vice City twilight sky, silhouette palm trees, glowing neon border, and three dedicated gauge zones for live CPU, RAM, and GPU stats.
+      </p>
+      <div class="grid wide-grid">
+        <div class="card gta">
+          <div class="preview-box wide">
+            <img src="themes/gta6_vice/widget_backgrounds/01_gta6_vice_sunset_telemetry_458x196.png" alt="GTA VI Telemetry Background">
+          </div>
+          <div class="card-title">Vice City Sunset Telemetry Background</div>
+          <div class="card-meta">Exact 458 x 196 px | Text-Free Ready to Upload</div>
+          <div class="btn-group">
+            <a class="download-link gta-btn" href="themes/gta6_vice/widget_backgrounds/01_gta6_vice_sunset_telemetry_458x196.png" download>Download 458x196</a>
+            <a class="download-link sec-btn" href="themes/gta6_vice/widget_backgrounds/high_dpi_2x/01_gta6_vice_sunset_telemetry_458x196_2x.png" download>2x Hi-DPI</a>
+            <a class="download-link sec-btn" href="themes/gta6_vice/widget_backgrounds/simulated_previews/preview_01_gta6_vice_sunset_telemetry.png" target="_blank">Simulated Live</a>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Pillar 1: Gaming Icons -->
+    <h2 class="section-title gta-title">Pillar 1: In-Game Operations (24 Gaming Icons)</h2>
+    <div class="grid">
+      <!-- 24 Gaming cards -->
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/01_engine_ignition.png" alt="Engine Ignition"></div>
+        <div class="card-title">Engine Ignition</div>
+        <div class="card-meta">GTA-GAME-01 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/01_engine_ignition_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_01_engine_ignition.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/02_headlights_highbeam.png" alt="High Beams"></div>
+        <div class="card-title">High Beams</div>
+        <div class="card-meta">GTA-GAME-02 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/02_headlights_highbeam_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_02_headlights_highbeam.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/03_nitro_boost.png" alt="Nitro Boost"></div>
+        <div class="card-title">Nitro Boost</div>
+        <div class="card-meta">GTA-GAME-03 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/03_nitro_boost_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_03_nitro_boost.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/04_handbrake_drift.png" alt="Handbrake Drift"></div>
+        <div class="card-title">Handbrake Drift</div>
+        <div class="card-meta">GTA-GAME-04 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/04_handbrake_drift_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_04_handbrake_drift.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/05_vice_radio.png" alt="Vice Radio"></div>
+        <div class="card-title">Vice Radio</div>
+        <div class="card-meta">GTA-GAME-05 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/05_vice_radio_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_05_vice_radio.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/06_cinematic_cam.png" alt="Cinematic Cam"></div>
+        <div class="card-title">Cinematic Cam</div>
+        <div class="card-meta">GTA-GAME-06 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/06_cinematic_cam_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_06_cinematic_cam.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/07_vtol_landing_gear.png" alt="VTOL / Gear"></div>
+        <div class="card-title">VTOL / Gear</div>
+        <div class="card-meta">GTA-GAME-07 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/07_vtol_landing_gear_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_07_vtol_landing_gear.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/08_vehicle_lock.png" alt="Door Lock"></div>
+        <div class="card-title">Door Lock</div>
+        <div class="card-meta">GTA-GAME-08 | Vehicle</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/08_vehicle_lock_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_08_vehicle_lock.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/09_weapon_wheel.png" alt="Weapon Wheel"></div>
+        <div class="card-title">Weapon Wheel</div>
+        <div class="card-meta">GTA-GAME-09 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/09_weapon_wheel_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_09_weapon_wheel.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/10_pistol_sidearm.png" alt="Pistol Sidearm"></div>
+        <div class="card-title">Pistol Sidearm</div>
+        <div class="card-meta">GTA-GAME-10 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/10_pistol_sidearm_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_10_pistol_sidearm.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/11_assault_rifle.png" alt="Assault Rifle"></div>
+        <div class="card-title">Assault Rifle</div>
+        <div class="card-meta">GTA-GAME-11 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/11_assault_rifle_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_11_assault_rifle.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/12_sniper_scope.png" alt="Sniper Scope"></div>
+        <div class="card-title">Sniper Scope</div>
+        <div class="card-meta">GTA-GAME-12 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/12_sniper_scope_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_12_sniper_scope.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/13_sticky_c4.png" alt="Sticky C4"></div>
+        <div class="card-title">Sticky C4</div>
+        <div class="card-meta">GTA-GAME-13 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/13_sticky_c4_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_13_sticky_c4.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/14_heavy_armor.png" alt="Heavy Armor"></div>
+        <div class="card-title">Heavy Armor</div>
+        <div class="card-meta">GTA-GAME-14 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/14_heavy_armor_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_14_heavy_armor.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/15_snack_heal.png" alt="Snack Heal"></div>
+        <div class="card-title">Snack Heal</div>
+        <div class="card-meta">GTA-GAME-15 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/15_snack_heal_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_15_snack_heal.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/16_clear_wanted.png" alt="Clear Wanted"></div>
+        <div class="card-title">Clear Wanted</div>
+        <div class="card-meta">GTA-GAME-16 | Combat</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/16_clear_wanted_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_16_clear_wanted.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/17_ifruit_phone.png" alt="iFruit Phone"></div>
+        <div class="card-title">iFruit Phone</div>
+        <div class="card-meta">GTA-GAME-17 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/17_ifruit_phone_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_17_ifruit_phone.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/18_interaction_menu.png" alt="Menu (M)"></div>
+        <div class="card-title">Interaction Menu (M)</div>
+        <div class="card-meta">GTA-GAME-18 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/18_interaction_menu_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_18_interaction_menu.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/19_gps_waypoint.png" alt="GPS Waypoint"></div>
+        <div class="card-title">GPS Waypoint</div>
+        <div class="card-meta">GTA-GAME-19 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/19_gps_waypoint_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_19_gps_waypoint.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/20_heist_loot.png" alt="Heist Loot"></div>
+        <div class="card-title">Heist Loot</div>
+        <div class="card-meta">GTA-GAME-20 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/20_heist_loot_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_20_heist_loot.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/21_cyber_hack.png" alt="Cyber Hack"></div>
+        <div class="card-title">Cyber Hack</div>
+        <div class="card-meta">GTA-GAME-21 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/21_cyber_hack_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_21_cyber_hack.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/22_hands_up_rp.png" alt="Hands Up RP"></div>
+        <div class="card-title">Hands Up RP</div>
+        <div class="card-meta">GTA-GAME-22 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/22_hands_up_rp_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_22_hands_up_rp.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/23_mask_bandana.png" alt="Mask On/Off"></div>
+        <div class="card-title">Mask On/Off</div>
+        <div class="card-meta">GTA-GAME-23 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/23_mask_bandana_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_23_mask_bandana.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/gaming_icons/keycaps/24_clip_snapshot.png" alt="Clip Snapshot"></div>
+        <div class="card-title">Clip Snapshot</div>
+        <div class="card-meta">GTA-GAME-24 | Heist & RP</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/gaming_icons/high_dpi_2x/24_clip_snapshot_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/gaming_icons/transparent_glyphs/glyph_24_clip_snapshot.png" download>RGBA</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pillar 2: Streaming Icons -->
+    <h2 class="section-title gta-title">Pillar 2: Broadcast Studio & Streaming (16 Streaming Icons)</h2>
+    <div class="grid">
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/25_scene_starting.png" alt="Scene Starting"></div>
+        <div class="card-title">Scene Starting</div>
+        <div class="card-meta">GTA-STRM-01 | Scenes</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/25_scene_starting_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_25_scene_starting.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/26_scene_gameplay.png" alt="Scene Gameplay"></div>
+        <div class="card-title">Scene Gameplay</div>
+        <div class="card-meta">GTA-STRM-02 | Scenes</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/26_scene_gameplay_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_26_scene_gameplay.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/27_scene_chatting.png" alt="Scene Chatting"></div>
+        <div class="card-title">Scene Chatting</div>
+        <div class="card-meta">GTA-STRM-03 | Scenes</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/27_scene_chatting_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_27_scene_chatting.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/28_scene_brb.png" alt="Scene BRB"></div>
+        <div class="card-title">Scene BRB</div>
+        <div class="card-meta">GTA-STRM-04 | Scenes</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/28_scene_brb_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_28_scene_brb.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/29_scene_ending.png" alt="Scene Ending"></div>
+        <div class="card-title">Scene Ending</div>
+        <div class="card-meta">GTA-STRM-05 | Scenes</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/29_scene_ending_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_29_scene_ending.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/30_mic_mute.png" alt="Mic Mute"></div>
+        <div class="card-title">Mic Mute</div>
+        <div class="card-meta">GTA-STRM-06 | Audio</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/30_mic_mute_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_30_mic_mute.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/31_headphone_deafen.png" alt="Deafen Headphones"></div>
+        <div class="card-title">Deafen Headphones</div>
+        <div class="card-meta">GTA-STRM-07 | Audio</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/31_headphone_deafen_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_31_headphone_deafen.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/32_discord_voice.png" alt="Discord Voice"></div>
+        <div class="card-title">Discord Voice</div>
+        <div class="card-meta">GTA-STRM-08 | Audio</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/32_discord_voice_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_32_discord_voice.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/33_music_track.png" alt="Music Track"></div>
+        <div class="card-title">Music Track</div>
+        <div class="card-meta">GTA-STRM-09 | Audio</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/33_music_track_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_33_music_track.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/34_soundboard.png" alt="Soundboard"></div>
+        <div class="card-title">Soundboard</div>
+        <div class="card-meta">GTA-STRM-10 | Audio</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/34_soundboard_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_34_soundboard.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/35_voice_fx.png" alt="Voice FX"></div>
+        <div class="card-title">Voice FX</div>
+        <div class="card-meta">GTA-STRM-11 | Audio</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/35_voice_fx_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_35_voice_fx.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/36_go_live.png" alt="Go Live / End"></div>
+        <div class="card-title">Go Live / End</div>
+        <div class="card-meta">GTA-STRM-12 | Production</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/36_go_live_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_36_go_live.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/37_replay_30s.png" alt="Replay 30s"></div>
+        <div class="card-title">Replay 30s</div>
+        <div class="card-meta">GTA-STRM-13 | Production</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/37_replay_30s_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_37_replay_30s.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/38_facecam_toggle.png" alt="Facecam Toggle"></div>
+        <div class="card-title">Facecam Toggle</div>
+        <div class="card-meta">GTA-STRM-14 | Production</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/38_facecam_toggle_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_38_facecam_toggle.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/39_highlight_marker.png" alt="Highlight Marker"></div>
+        <div class="card-title">Highlight Marker</div>
+        <div class="card-meta">GTA-STRM-15 | Production</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/39_highlight_marker_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_39_highlight_marker.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card gta">
+        <div class="preview-box"><img src="themes/gta6_vice/streaming_icons/keycaps/40_mod_shield.png" alt="Mod Shield"></div>
+        <div class="card-title">Mod Shield</div>
+        <div class="card-meta">GTA-STRM-16 | Production</div>
+        <div class="btn-group">
+          <a class="download-link gta-btn" href="themes/gta6_vice/streaming_icons/high_dpi_2x/40_mod_shield_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/gta6_vice/streaming_icons/transparent_glyphs/glyph_40_mod_shield.png" download>RGBA</a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Marked Master Images -->
-  <h2 class="section-title">Marked & Annotated Stream Deck Panel</h2>
-  <div class="overview-container">
-    <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--accent-orange);">Marked Panel with HUD Legend & Coordinate Mapping</h3>
-    <a href="annotated/marked_panel_with_legend.png" target="_blank">
-      <img src="annotated/marked_panel_with_legend.png" alt="Marked Panel with Legend">
-    </a>
-    <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
-      Click the image above to open full resolution (2097 x 1110) in a new tab.
-    </p>
-  </div>
+  <!-- ============================================================== -->
+  <!-- THEME 1: SIMFORGE INDUSTRIAL GAMING THEME -->
+  <!-- ============================================================== -->
+  <div id="theme-sim" class="theme-content">
+    <!-- 458x196 SimForge Fire Metal Widget Backgrounds -->
+    <div class="featured-banner sim">
+      <h2 style="font-size: 17px; color: var(--sim-orange); margin-bottom: 6px;">
+        🔥 458 x 196 SimForge Fire Metal Widget Backgrounds
+      </h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+        Designed specifically for dynamic CPU / RAM / GPU system telemetry.
+      </p>
 
-  <!-- Keycap Buttons -->
-  <h2 class="section-title">Physical Keycap Buttons (1x & 2x Hi-DPI)</h2>
-  <div class="grid">
-    <div class="card">
-      <div class="preview-box"><img src="buttons/01_btn_esc.png" alt="ESC"></div>
-      <div class="card-title">ESC Keycap</div>
-      <div class="card-meta">BTN-01 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/01_btn_esc_2x.png" download>Download 2x Hi-DPI</a>
+      <div class="grid wide-grid">
+        <div class="card sim">
+          <div class="preview-box wide"><img src="simforge_widget_backgrounds/01_simforge_fire_metal_molten_forge_458x196.png" alt="Molten Forge"></div>
+          <div class="card-title">1. Molten Forge Edition (Featured)</div>
+          <div class="card-meta">458 x 196 px | Glowing Anvil Badge & Molten Rim</div>
+          <div class="btn-group">
+            <a class="download-link sim-btn" href="simforge_widget_backgrounds/01_simforge_fire_metal_molten_forge_458x196.png" download>Download 458x196</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/high_dpi_2x/01_simforge_fire_metal_molten_forge_458x196_2x.png" download>2x Hi-DPI</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/simulated_previews/preview_01_simforge_fire_metal_molten_forge_458x196.png" target="_blank">Simulated Live</a>
+          </div>
+        </div>
+        <div class="card sim">
+          <div class="preview-box wide"><img src="simforge_widget_backgrounds/02_simforge_fire_metal_brand_banner_458x196.png" alt="Brand Banner"></div>
+          <div class="card-title">2. Full Brand Banner Edition</div>
+          <div class="card-meta">458 x 196 px | SimForge Wordmark Header</div>
+          <div class="btn-group">
+            <a class="download-link sim-btn" href="simforge_widget_backgrounds/02_simforge_fire_metal_brand_banner_458x196.png" download>Download 458x196</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/high_dpi_2x/02_simforge_fire_metal_brand_banner_458x196_2x.png" download>2x Hi-DPI</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/simulated_previews/preview_02_simforge_fire_metal_brand_banner_458x196.png" target="_blank">Simulated Live</a>
+          </div>
+        </div>
+        <div class="card sim">
+          <div class="preview-box wide"><img src="simforge_widget_backgrounds/03_simforge_fire_metal_hardware_icons_458x196.png" alt="Hardware Icons"></div>
+          <div class="card-title">3. Molten Hardware Icons Edition</div>
+          <div class="card-meta">458 x 196 px | Chip, RAM & Fan Glyphs</div>
+          <div class="btn-group">
+            <a class="download-link sim-btn" href="simforge_widget_backgrounds/03_simforge_fire_metal_hardware_icons_458x196.png" download>Download 458x196</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/high_dpi_2x/03_simforge_fire_metal_hardware_icons_458x196_2x.png" download>2x Hi-DPI</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/simulated_previews/preview_03_simforge_fire_metal_hardware_icons_458x196.png" target="_blank">Simulated Live</a>
+          </div>
+        </div>
+        <div class="card sim">
+          <div class="preview-box wide"><img src="simforge_widget_backgrounds/04_simforge_fire_metal_clean_forge_458x196.png" alt="Clean Forge"></div>
+          <div class="card-title">4. Clean Industrial Forge Edition</div>
+          <div class="card-meta">458 x 196 px | Max Contrast & Intense Bezel</div>
+          <div class="btn-group">
+            <a class="download-link sim-btn" href="simforge_widget_backgrounds/04_simforge_fire_metal_clean_forge_458x196.png" download>Download 458x196</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/high_dpi_2x/04_simforge_fire_metal_clean_forge_458x196_2x.png" download>2x Hi-DPI</a>
+            <a class="download-link sec-btn" href="simforge_widget_backgrounds/simulated_previews/preview_04_simforge_fire_metal_clean_forge_458x196.png" target="_blank">Simulated Live</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/02_btn_ccrp_off.png" alt="CCRP OFF"></div>
-      <div class="card-title">CCRP OFF Keycap</div>
-      <div class="card-meta">BTN-02 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/02_btn_ccrp_off_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/03_btn_x_weapon.png" alt="X WEAPON"></div>
-      <div class="card-title">X WEAPON Keycap</div>
-      <div class="card-meta">BTN-03 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/03_btn_x_weapon_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/04_btn_empty_slot_1.png" alt="Empty Slot 1"></div>
-      <div class="card-title">Empty Slot 1 (Hazard)</div>
-      <div class="card-meta">BTN-04 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/04_btn_empty_slot_1_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/05_btn_empty_slot_2.png" alt="Empty Slot 2"></div>
-      <div class="card-title">Empty Slot 2 (Hazard)</div>
-      <div class="card-meta">BTN-05 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/05_btn_empty_slot_2_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/06_btn_cover_me.png" alt="COVER ME"></div>
-      <div class="card-title">COVER ME Keycap</div>
-      <div class="card-meta">BTN-06 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/06_btn_cover_me_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/07_btn_attack_him.png" alt="ATTACK HIM"></div>
-      <div class="card-title">ATTACK HIM Keycap</div>
-      <div class="card-meta">BTN-07 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/07_btn_attack_him_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/08_btn_thank.png" alt="THANK"></div>
-      <div class="card-title">THANK Keycap</div>
-      <div class="card-meta">BTN-08 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/08_btn_thank_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/09_btn_smoke.png" alt="SMOKE"></div>
-      <div class="card-title">SMOKE Keycap</div>
-      <div class="card-meta">BTN-09 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/09_btn_smoke_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/10_btn_jetison.png" alt="JETISON"></div>
-      <div class="card-title">JETISON Keycap</div>
-      <div class="card-meta">BTN-10 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/10_btn_jetison_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/11_btn_yes.png" alt="YES"></div>
-      <div class="card-title">YES Keycap</div>
-      <div class="card-meta">BTN-11 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/11_btn_yes_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/12_btn_ctrl_win.png" alt="Ctrl+Win"></div>
-      <div class="card-title">Ctrl+Win Keycap</div>
-      <div class="card-meta">BTN-12 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/12_btn_ctrl_win_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="buttons/13_btn_no.png" alt="NO"></div>
-      <div class="card-title">NO Keycap</div>
-      <div class="card-meta">BTN-13 | 186x186</div>
-      <a class="download-link" href="buttons/high_dpi_2x/13_btn_no_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-  </div>
 
-  <!-- Isolated Glyphs -->
-  <h2 class="section-title">Isolated Glowing Icon Glyphs (Transparent RGBA)</h2>
-  <div class="grid">
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_01_btn_esc.png" alt="ESC Icon"></div>
-      <div class="card-title">ESC Icon Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_01_btn_esc_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_02_btn_ccrp_off.png" alt="CCRP Icon"></div>
-      <div class="card-title">CCRP OFF Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_02_btn_ccrp_off_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_03_btn_x_weapon.png" alt="Weapon Icon"></div>
-      <div class="card-title">X WEAPON Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_03_btn_x_weapon_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_06_btn_cover_me.png" alt="Cover Me Icon"></div>
-      <div class="card-title">COVER ME Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_06_btn_cover_me_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_07_btn_attack_him.png" alt="Attack Him Icon"></div>
-      <div class="card-title">ATTACK HIM Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_07_btn_attack_him_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_08_btn_thank.png" alt="Thank Icon"></div>
-      <div class="card-title">THANK Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_08_btn_thank_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_09_btn_smoke.png" alt="Smoke Icon"></div>
-      <div class="card-title">SMOKE Canister Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_09_btn_smoke_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_10_btn_jetison.png" alt="Jetison Icon"></div>
-      <div class="card-title">JETISON Bomb Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_10_btn_jetison_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_11_btn_yes.png" alt="YES Icon"></div>
-      <div class="card-title">YES Checkmark Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_11_btn_yes_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_12_btn_ctrl_win.png" alt="Ctrl Win Icon"></div>
-      <div class="card-title">Ctrl+Win Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_12_btn_ctrl_win_2x.png" download>Download 2x RGBA</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_13_btn_no.png" alt="NO Icon"></div>
-      <div class="card-title">NO Cross Glyph</div>
-      <div class="card-meta">Transparent Alpha</div>
-      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_13_btn_no_2x.png" download>Download 2x RGBA</a>
+    <!-- SimForge Physical Keycaps -->
+    <h2 class="section-title sim-title">SimForge Physical Keycaps & Cockpit Controls</h2>
+    <div class="grid">
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/01_btn_esc.png" alt="ESC"></div>
+        <div class="card-title">ESC Keycap</div>
+        <div class="card-meta">BTN-01 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/01_btn_esc_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/02_btn_ccrp_off.png" alt="CCRP OFF"></div>
+        <div class="card-title">CCRP OFF Keycap</div>
+        <div class="card-meta">BTN-02 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/02_btn_ccrp_off_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/03_btn_x_weapon.png" alt="X WEAPON"></div>
+        <div class="card-title">X WEAPON Keycap</div>
+        <div class="card-meta">BTN-03 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/03_btn_x_weapon_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/06_btn_cover_me.png" alt="COVER ME"></div>
+        <div class="card-title">COVER ME Keycap</div>
+        <div class="card-meta">BTN-06 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/06_btn_cover_me_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/07_btn_attack_him.png" alt="ATTACK HIM"></div>
+        <div class="card-title">ATTACK HIM Keycap</div>
+        <div class="card-meta">BTN-07 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/07_btn_attack_him_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/08_btn_thank.png" alt="THANK"></div>
+        <div class="card-title">THANK Keycap</div>
+        <div class="card-meta">BTN-08 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/08_btn_thank_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/09_btn_smoke.png" alt="SMOKE"></div>
+        <div class="card-title">SMOKE Keycap</div>
+        <div class="card-meta">BTN-09 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/09_btn_smoke_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box"><img src="buttons/10_btn_jetison.png" alt="JETISON"></div>
+        <div class="card-title">JETISON Keycap</div>
+        <div class="card-meta">BTN-10 | 186x186</div>
+        <a class="download-link sim-btn" href="buttons/high_dpi_2x/10_btn_jetison_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box checker"><img src="controls_and_knobs/03_rotary_knob_1_circular.png" alt="Rotary Knob"></div>
+        <div class="card-title">Rotary Encoder 1</div>
+        <div class="card-meta">Circular Alpha</div>
+        <a class="download-link sim-btn" href="controls_and_knobs/high_dpi_2x/03_rotary_knob_1_2x.png" download>2x Hi-DPI</a>
+      </div>
+      <div class="card sim">
+        <div class="preview-box checker"><img src="branding/02_simforge_anvil_badge_circular.png" alt="SimForge Emblem"></div>
+        <div class="card-title">SimForge Anvil Emblem</div>
+        <div class="card-meta">Circular Alpha</div>
+        <a class="download-link sim-btn" href="branding/high_dpi_2x/02_simforge_anvil_badge_2x.png" download>2x Hi-DPI</a>
+      </div>
     </div>
   </div>
 
-  <!-- Hardware Controls & Knobs -->
-  <h2 class="section-title">Hardware Controls, Knobs & Dials</h2>
-  <div class="grid">
-    <div class="card">
-      <div class="preview-box checker"><img src="controls_and_knobs/01_push_button_left_circular.png" alt="Push Button Left"></div>
-      <div class="card-title">Push Button 1 (Left)</div>
-      <div class="card-meta">CTL-01 | Circular Alpha</div>
-      <a class="download-link" href="controls_and_knobs/high_dpi_2x/01_push_button_left_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="controls_and_knobs/02_push_button_mid_left_circular.png" alt="Push Button Mid-Left"></div>
-      <div class="card-title">Push Button 2 (Mid-Left)</div>
-      <div class="card-meta">CTL-02 | Circular Alpha</div>
-      <a class="download-link" href="controls_and_knobs/high_dpi_2x/02_push_button_mid_left_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="controls_and_knobs/03_rotary_knob_1_circular.png" alt="Rotary Knob 1"></div>
-      <div class="card-title">Rotary Knob 1 (Left Dial)</div>
-      <div class="card-meta">CTL-03 | Circular Alpha</div>
-      <a class="download-link" href="controls_and_knobs/high_dpi_2x/03_rotary_knob_1_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="controls_and_knobs/04_rotary_knob_2_circular.png" alt="Rotary Knob 2"></div>
-      <div class="card-title">Rotary Knob 2 (Center Dial)</div>
-      <div class="card-meta">CTL-04 | Circular Alpha</div>
-      <a class="download-link" href="controls_and_knobs/high_dpi_2x/04_rotary_knob_2_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="controls_and_knobs/05_rotary_knob_3_circular.png" alt="Rotary Knob 3"></div>
-      <div class="card-title">Rotary Knob 3 (Right Dial)</div>
-      <div class="card-meta">CTL-05 | Circular Alpha</div>
-      <a class="download-link" href="controls_and_knobs/high_dpi_2x/05_rotary_knob_3_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-  </div>
-
-  <!-- Branding & Header -->
-  <h2 class="section-title">Branding & Emblems</h2>
-  <div class="grid wide-grid">
-    <div class="card">
-      <div class="preview-box"><img src="branding/01_simforge_header_full.png" alt="SimForge Full Header"></div>
-      <div class="card-title">SimForge Header Full Banner</div>
-      <div class="card-meta">BRD-01 | 450x120</div>
-      <a class="download-link" href="branding/high_dpi_2x/01_simforge_header_full_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="branding/02_simforge_anvil_badge_circular.png" alt="Anvil Badge"></div>
-      <div class="card-title">Anvil & Hammer Badge</div>
-      <div class="card-meta">BRD-02 | Circular Alpha</div>
-      <a class="download-link" href="branding/high_dpi_2x/02_simforge_anvil_badge_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="branding/03_simforge_wordmark.png" alt="SimForge Wordmark"></div>
-      <div class="card-title">SimForge Typography Wordmark</div>
-      <div class="card-meta">BRD-03 | 305x80</div>
-      <a class="download-link" href="branding/high_dpi_2x/03_simforge_wordmark_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-  </div>
-
-  <!-- Backgrounds & Chassis Templates -->
-  <h2 class="section-title">Chassis Backgrounds & Modular Templates</h2>
-  <div class="grid wide-grid">
-    <div class="card">
-      <div class="preview-box"><img src="backgrounds_and_chassis/10_clean_chassis_modular_template.png" alt="Modular Chassis"></div>
-      <div class="card-title">Modular Clean Chassis Template</div>
-      <div class="card-meta">Custom Stream Deck Template | 1417x1110</div>
-      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/10_clean_chassis_modular_template_2x.png" download>Download 2x Template</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="backgrounds_and_chassis/01_chassis_upper_faceplate.png" alt="Upper Faceplate"></div>
-      <div class="card-title">Upper Chassis Faceplate</div>
-      <div class="card-meta">BKG-01 | 1367x735</div>
-      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/01_chassis_upper_faceplate_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="backgrounds_and_chassis/02_chassis_lower_deck.png" alt="Lower Deck"></div>
-      <div class="card-title">Lower Control Deck Plate</div>
-      <div class="card-meta">BKG-02 | 1367x330</div>
-      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/02_chassis_lower_deck_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-  </div>
+  <script>
+    function switchTheme(theme) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.theme-content').forEach(c => c.classList.remove('active'));
+      
+      if (theme === 'gta') {
+        document.querySelector('.tab-btn.gta').classList.add('active');
+        document.getElementById('theme-gta').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn.sim').classList.add('active');
+        document.getElementById('theme-sim').classList.add('active');
+      }
+    }
+  </script>
 </body>
 </html>
