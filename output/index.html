@@ -66,6 +66,13 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
+    .featured-banner {
+      background: linear-gradient(135deg, rgba(255, 69, 0, 0.15), rgba(255, 140, 0, 0.05));
+      border: 1px solid rgba(255, 140, 0, 0.4);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
     .overview-container {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -86,6 +93,9 @@
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 18px;
       margin-bottom: 30px;
+    }
+    .wide-grid {
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     }
     .card {
       background: var(--card-bg);
@@ -114,12 +124,15 @@
       position: relative;
       overflow: hidden;
     }
+    .preview-box.wide {
+      height: 160px;
+    }
     .preview-box.checker {
       background: repeating-conic-gradient(#1a1e24 0% 25%, #0f1216 0% 50%) 50% / 16px 16px;
     }
     .preview-box img {
-      max-width: 90%;
-      max-height: 90%;
+      max-width: 95%;
+      max-height: 95%;
       object-fit: contain;
     }
     .card-title {
@@ -134,8 +147,14 @@
       color: var(--text-muted);
       margin-bottom: 10px;
     }
-    .download-link {
+    .btn-group {
+      display: flex;
+      gap: 8px;
       margin-top: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .download-link {
       font-size: 11px;
       color: var(--accent-blue);
       text-decoration: none;
@@ -147,24 +166,112 @@
     .download-link:hover {
       background: rgba(0, 191, 255, 0.15);
     }
-    .wide-grid {
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    .download-link.featured {
+      color: #fff;
+      background: linear-gradient(135deg, #ff8c00, #ff4500);
+      border-color: #ff8c00;
+      font-weight: 600;
+    }
+    .download-link.featured:hover {
+      opacity: 0.9;
     }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <h1>SimForge <span>Stream Deck Asset Extraction</span></h1>
+      <h1>SimForge <span>Stream Deck Asset Suite</span></h1>
       <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
-        Complete marked overview, isolated buttons, icon glyphs, hardware controls, display gauges, and chassis templates.
+        Custom Fire Metal widget backgrounds, marked panel HUD, isolated icon glyphs, and high-DPI stream deck templates.
       </p>
     </div>
-    <div class="stats-badge">1417x1110 Master Image | 2x Super-Sampled Hi-DPI Assets</div>
+    <div class="stats-badge">Exact 458x196 px Widget Backgrounds Ready to Use</div>
   </header>
 
+  <!-- FEATURED: 458x196 SIMFORGE FIRE METAL WIDGET BACKGROUNDS -->
+  <div class="featured-banner">
+    <h2 style="font-size: 18px; color: var(--accent-orange); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+      🔥 458 x 196 SimForge Fire Metal Widget Backgrounds
+    </h2>
+    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+      Designed specifically for your CPU / RAM / GPU monitor widget where numbers change dynamically. Select any of these background files in your Stream Deck software.
+    </p>
+
+    <div class="grid wide-grid">
+      <!-- Variant 1 -->
+      <div class="card">
+        <div class="preview-box wide">
+          <img src="simforge_widget_backgrounds/01_simforge_fire_metal_molten_forge_458x196.png" alt="Molten Forge Edition">
+        </div>
+        <div class="card-title">1. Molten Forge Edition (Recommended)</div>
+        <div class="card-meta">Exact 458 x 196 px | Glowing Anvil Badge & Fire Metal Rim</div>
+        <div class="btn-group">
+          <a class="download-link featured" href="simforge_widget_backgrounds/01_simforge_fire_metal_molten_forge_458x196.png" download>Download 458x196</a>
+          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/01_simforge_fire_metal_molten_forge_458x196_2x.png" download>2x Hi-DPI</a>
+          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_01_simforge_fire_metal_molten_forge_458x196.png" target="_blank">Simulated Live</a>
+        </div>
+      </div>
+
+      <!-- Variant 2 -->
+      <div class="card">
+        <div class="preview-box wide">
+          <img src="simforge_widget_backgrounds/02_simforge_fire_metal_brand_banner_458x196.png" alt="Brand Banner Edition">
+        </div>
+        <div class="card-title">2. Full Brand Banner Edition</div>
+        <div class="card-meta">Exact 458 x 196 px | Full SimForge Wordmark Header</div>
+        <div class="btn-group">
+          <a class="download-link featured" href="simforge_widget_backgrounds/02_simforge_fire_metal_brand_banner_458x196.png" download>Download 458x196</a>
+          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/02_simforge_fire_metal_brand_banner_458x196_2x.png" download>2x Hi-DPI</a>
+          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_02_simforge_fire_metal_brand_banner_458x196.png" target="_blank">Simulated Live</a>
+        </div>
+      </div>
+
+      <!-- Variant 3 -->
+      <div class="card">
+        <div class="preview-box wide">
+          <img src="simforge_widget_backgrounds/03_simforge_fire_metal_hardware_icons_458x196.png" alt="Hardware Icons Edition">
+        </div>
+        <div class="card-title">3. Molten Hardware Icons Edition</div>
+        <div class="card-meta">Exact 458 x 196 px | Wireframe Chip, RAM & Fan Glyphs</div>
+        <div class="btn-group">
+          <a class="download-link featured" href="simforge_widget_backgrounds/03_simforge_fire_metal_hardware_icons_458x196.png" download>Download 458x196</a>
+          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/03_simforge_fire_metal_hardware_icons_458x196_2x.png" download>2x Hi-DPI</a>
+          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_03_simforge_fire_metal_hardware_icons_458x196.png" target="_blank">Simulated Live</a>
+        </div>
+      </div>
+
+      <!-- Variant 4 -->
+      <div class="card">
+        <div class="preview-box wide">
+          <img src="simforge_widget_backgrounds/04_simforge_fire_metal_clean_forge_458x196.png" alt="Clean Industrial Forge">
+        </div>
+        <div class="card-title">4. Clean Industrial Forge Edition</div>
+        <div class="card-meta">Exact 458 x 196 px | Intense Molten Seam & Maximum Contrast</div>
+        <div class="btn-group">
+          <a class="download-link featured" href="simforge_widget_backgrounds/04_simforge_fire_metal_clean_forge_458x196.png" download>Download 458x196</a>
+          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/04_simforge_fire_metal_clean_forge_458x196_2x.png" download>2x Hi-DPI</a>
+          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_04_simforge_fire_metal_clean_forge_458x196.png" target="_blank">Simulated Live</a>
+        </div>
+      </div>
+
+      <!-- Variant 5 -->
+      <div class="card">
+        <div class="preview-box wide">
+          <img src="simforge_widget_backgrounds/05_simforge_fire_metal_panel_remaster_458x196.png" alt="Original Panel Remaster">
+        </div>
+        <div class="card-title">5. Original Hardware Remaster</div>
+        <div class="card-meta">Exact 458 x 196 px | Sourced from Stream Deck Panel Screen</div>
+        <div class="btn-group">
+          <a class="download-link featured" href="simforge_widget_backgrounds/05_simforge_fire_metal_panel_remaster_458x196.png" download>Download 458x196</a>
+          <a class="download-link" href="simforge_widget_backgrounds/high_dpi_2x/05_simforge_fire_metal_panel_remaster_458x196_2x.png" download>2x Hi-DPI</a>
+          <a class="download-link" href="simforge_widget_backgrounds/simulated_previews/preview_05_simforge_fire_metal_panel_remaster_458x196.png" target="_blank">Simulated Live</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Marked Master Images -->
-  <h2 class="section-title">1. Marked & Annotated Stream Deck Panel</h2>
+  <h2 class="section-title">Marked & Annotated Stream Deck Panel</h2>
   <div class="overview-container">
     <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--accent-orange);">Marked Panel with HUD Legend & Coordinate Mapping</h3>
     <a href="annotated/marked_panel_with_legend.png" target="_blank">
@@ -176,7 +283,7 @@
   </div>
 
   <!-- Keycap Buttons -->
-  <h2 class="section-title">2. Physical Keycap Buttons (1x & 2x Hi-DPI)</h2>
+  <h2 class="section-title">Physical Keycap Buttons (1x & 2x Hi-DPI)</h2>
   <div class="grid">
     <div class="card">
       <div class="preview-box"><img src="buttons/01_btn_esc.png" alt="ESC"></div>
@@ -259,7 +366,7 @@
   </div>
 
   <!-- Isolated Glyphs -->
-  <h2 class="section-title">3. Isolated Glowing Icon Glyphs (Transparent RGBA)</h2>
+  <h2 class="section-title">Isolated Glowing Icon Glyphs (Transparent RGBA)</h2>
   <div class="grid">
     <div class="card">
       <div class="preview-box checker"><img src="icons_isolated/transparent/icon_01_btn_esc.png" alt="ESC Icon"></div>
@@ -329,37 +436,8 @@
     </div>
   </div>
 
-  <!-- Display Unit & Telemetry -->
-  <h2 class="section-title">4. System Telemetry Display Unit</h2>
-  <div class="grid wide-grid">
-    <div class="card">
-      <div class="preview-box"><img src="display_panel/01_system_display_unit.png" alt="Full Display"></div>
-      <div class="card-title">Complete Telemetry Display Unit</div>
-      <div class="card-meta">DSP-01 | 410x186</div>
-      <a class="download-link" href="display_panel/high_dpi_2x/01_system_display_unit_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="display_panel/02_telemetry_cpu.png" alt="CPU Meter"></div>
-      <div class="card-title">CPU Meter (4% Microchip)</div>
-      <div class="card-meta">DSP-02 | 125x156</div>
-      <a class="download-link" href="display_panel/high_dpi_2x/02_telemetry_cpu_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="display_panel/03_telemetry_ram.png" alt="RAM Meter"></div>
-      <div class="card-title">RAM Meter (30% Module)</div>
-      <div class="card-meta">DSP-03 | 125x156</div>
-      <a class="download-link" href="display_panel/high_dpi_2x/03_telemetry_ram_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box"><img src="display_panel/04_telemetry_gpu.png" alt="GPU Meter"></div>
-      <div class="card-title">GPU Meter (4% Fan)</div>
-      <div class="card-meta">DSP-04 | 125x156</div>
-      <a class="download-link" href="display_panel/high_dpi_2x/04_telemetry_gpu_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-  </div>
-
   <!-- Hardware Controls & Knobs -->
-  <h2 class="section-title">5. Hardware Controls, Knobs & Dials</h2>
+  <h2 class="section-title">Hardware Controls, Knobs & Dials</h2>
   <div class="grid">
     <div class="card">
       <div class="preview-box checker"><img src="controls_and_knobs/01_push_button_left_circular.png" alt="Push Button Left"></div>
@@ -394,7 +472,7 @@
   </div>
 
   <!-- Branding & Header -->
-  <h2 class="section-title">6. Branding & Emblems</h2>
+  <h2 class="section-title">Branding & Emblems</h2>
   <div class="grid wide-grid">
     <div class="card">
       <div class="preview-box"><img src="branding/01_simforge_header_full.png" alt="SimForge Full Header"></div>
@@ -417,7 +495,7 @@
   </div>
 
   <!-- Backgrounds & Chassis Templates -->
-  <h2 class="section-title">7. Chassis Backgrounds, Modular Template & Hardware Screws</h2>
+  <h2 class="section-title">Chassis Backgrounds & Modular Templates</h2>
   <div class="grid wide-grid">
     <div class="card">
       <div class="preview-box"><img src="backgrounds_and_chassis/10_clean_chassis_modular_template.png" alt="Modular Chassis"></div>
@@ -436,12 +514,6 @@
       <div class="card-title">Lower Control Deck Plate</div>
       <div class="card-meta">BKG-02 | 1367x330</div>
       <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/02_chassis_lower_deck_2x.png" download>Download 2x Hi-DPI</a>
-    </div>
-    <div class="card">
-      <div class="preview-box checker"><img src="backgrounds_and_chassis/05_bolt_top_left_circular.png" alt="Hex Bolt"></div>
-      <div class="card-title">Industrial Hex Mounting Bolt</div>
-      <div class="card-meta">BKG-05 | Circular Alpha</div>
-      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/05_bolt_top_left_2x.png" download>Download 2x Hi-DPI</a>
     </div>
   </div>
 </body>
