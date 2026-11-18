@@ -56,6 +56,20 @@
 - Authored comprehensive documentation manual GTA6_ICON_PACK_GUIDE.md detailing color codes, icon use cases, recommended keybinds/macros, OBS WebSocket integration, and Stream Deck layout blueprints (15-key and 32-key).
 - Updated interactive HTML catalog (output/index.html) with dynamic dual-theme switcher tabs and asset download controls.
 
+## GTA VI Pro Bold Proportion Overhaul & Ulanzi Reference Mapping
+- Analyzed user feedback and hardware screenshots of Ulanzi Stream Deck and OBS Control Room icon sets where icons appeared too small in earlier builds.
+- Upgraded generate_gta6_icon_pack.py to significantly enlarge all glyphs:
+  - Scaled hero symbols to occupy 55% to 70% of the 186x186 px keycap area (75px to 135px tall/wide) for instant readability from across the room.
+  - Increased line weights to heavy 4px to 8px bold strokes and solid filled geometry.
+  - Applied neon drop bloom in Electric Cyan, Hot Magenta, and Sunset Gold for authentic glowing deck illumination.
+- Expanded the suite to 48 comprehensive bold icons:
+  - 24 Streaming & Media Control Icons: Scene switch, record stream, start stream, virtual cam, studio mode, bold play, pause, play next, play previous, skip alert, alert bell, mute alerts, reload overlays, viewer requests, widget toggle, video toggle, volume up, volume down, mute audio, set volume, mic mute, headphone deafen, mod shield, and replay buffer 30s.
+  - 24 GTA VI Gaming & In-Game Operations Icons: Engine ignition, high beams, nitro boost, drift brake, Vice radio, cinematic cam, VTOL gear, car lock, weapon wheel, pistol, assault rifle, sniper, sticky C4, heavy armor, snack heal, clear wanted, iFruit phone, menu (M), GPS map, heist loot, cyber hack, hands up RP, mask on/off, and hero play.
+- Generated all 48 icons across 3 formats: 1x Keycaps (186x186 px), 2x Hi-DPI Keycaps (372x372 px), and Transparent 32-bit RGBA Vector Glyphs.
+- Updated GTA6_ICON_PACK_GUIDE.md and output/themes/gta6_vice/README.md with full mapping, use cases, and hardware ergonomics.
+- Refreshed output/index.html with large-preview card layouts, checkerboard transparency visualizers, and direct download buttons.
+
+
 
 
 

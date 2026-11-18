@@ -1,22 +1,22 @@
 """
-GTA VI / Vice City (GTX 6) Icon Pack & Telemetry Suite
-Generates:
-1. 24 Gaming Icons (Vehicles, Combat, Heists, Roleplay, Navigation)
-2. 16 Streaming Icons (OBS Scenes, Audio Studio, Camera, Recording, Moderation)
-3. 3 Custom 458x196 px System Telemetry Widget Backgrounds (CPU / RAM / GPU)
-4. 2x Hi-DPI Renders & Transparent Glyphs
+GTA VI / Vice City (GTX 6) Pro Stream Deck Icon Suite (Bold Edition)
+Engineered for Ulanzi, Elgato, and Touch Portal hardware decks.
+Features:
+- Large, bold proportions (glyph occupies 55% - 65% of keycap area)
+- Thick 4px to 8px line weights & solid fills for instant legibility
+- Neon luminescence & soft bloom in Electric Cyan, Hot Magenta, and Sunset Gold
+- 48 Icons covering OBS Control Room, Media Controls, and GTA VI Gaming
+- 1x Keycaps (186x186), 2x Hi-DPI (372x372), and Transparent Glyphs (32-bit RGBA)
 """
 
 import os
 import math
 import cv2
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, "output", "themes", "gta6_vice")
 
-# Directories
 DIRS = {
     "game_keys": os.path.join(OUTPUT_DIR, "gaming_icons", "keycaps"),
     "game_trans": os.path.join(OUTPUT_DIR, "gaming_icons", "transparent_glyphs"),
@@ -34,79 +34,57 @@ for d in DIRS.values():
 
 KEY_SIZE = 186
 
-# Color Palette (BGR for OpenCV, RGB for PIL)
-PALETTE = {
-    "vice_black": (20, 10, 24),        # Deepest night indigo
-    "vice_purple": (77, 18, 45),       # Deep twilight purple #2D124D
-    "neon_magenta": (118, 34, 216),    # Hot pink / magenta #D82276
-    "sunset_peach": (68, 160, 255),    # Golden peach #FFA044
-    "neon_cyan": (255, 240, 0),        # Electric cyan #00F0FF
-    "neon_gold": (0, 184, 255),        # Sunset gold #FFB800
-    "pure_white": (255, 255, 255),
-}
+# Color Palette (BGR)
+C_CYAN = (255, 240, 0)       # Electric Cyan #00F0FF
+C_MAGENTA = (216, 34, 118)   # Hot Magenta #D82276
+C_PINK = (255, 85, 163)      # Neon Pink #FF55A3
+C_GOLD = (68, 160, 255)      # Sunset Peach/Gold #FFA044
+C_WHITE = (255, 255, 255)
+C_RED = (40, 40, 255)        # Hot Red Alert
+C_GREEN = (80, 255, 100)     # Neon Mint / Active Green
 
-def create_vice_gradient_keycap(w=186, h=186, style="sunset"):
-    """Creates a Vice City aesthetic keycap base with neon beveled glow and silhouette palms."""
+def create_vice_gradient_keycap(w=186, h=186):
+    """
+    Creates a rich Vice City aesthetic keycap with deep violet gradient,
+    subtle horizon sunset glow, and glowing neon beveled border.
+    """
     img = np.zeros((h, w, 3), dtype=np.uint8)
     
-    # 1. Base dark plate with subtle dusk gradient
+    # 1. Background: Deep Vice Violet Gradient (#160824 to #2B0C3C)
     for y in range(h):
         t = y / float(h)
-        if style == "sunset":
-            # Dark violet (#1A0A26) to dusky purple (#361245)
-            b = int(38 * (1 - t) + 69 * t)
-            g = int(10 * (1 - t) + 18 * t)
-            r = int(26 * (1 - t) + 54 * t)
-        else: # neon_night
-            b = int(30 * (1 - t) + 45 * t)
-            g = int(12 * (1 - t) + 20 * t)
-            r = int(18 * (1 - t) + 28 * t)
+        b = int(36 * (1 - t) + 60 * t)
+        g = int(8 * (1 - t) + 12 * t)
+        r = int(22 * (1 - t) + 43 * t)
         img[y, :] = (b, g, r)
-        
-    # 2. Add subtle horizon sunset glow band at bottom third
+
+    # 2. Subtle sunset glow along bottom edge
     glow_h = int(h * 0.35)
     horizon_glow = np.zeros((h, w, 3), dtype=np.float32)
     for y in range(h - glow_h, h):
         factor = (y - (h - glow_h)) / float(glow_h)
-        # Peach / magenta glow
-        horizon_glow[y, :, 0] += factor * 35   # B
-        horizon_glow[y, :, 1] += factor * 70   # G
-        horizon_glow[y, :, 2] += factor * 160  # R
+        horizon_glow[y, :, 0] += factor * 30   # B
+        horizon_glow[y, :, 1] += factor * 50   # G
+        horizon_glow[y, :, 2] += factor * 140  # R
     img = np.clip(img.astype(np.float32) + horizon_glow, 0, 255).astype(np.uint8)
 
-    # 3. Add silhouette palm frond in corner for Vice City atmosphere
-    # Gentle dark silhouette curved fronds
-    cv2.ellipse(img, (w + 10, h - 20), (50, 80), 35, 180, 290, (12, 6, 16), 2, lineType=cv2.LINE_AA)
-    cv2.ellipse(img, (w + 15, h - 15), (40, 70), 30, 180, 290, (12, 6, 16), 2, lineType=cv2.LINE_AA)
-    cv2.ellipse(img, (-10, h - 20), (50, 80), -35, 250, 360, (12, 6, 16), 2, lineType=cv2.LINE_AA)
+    # 3. Corner palm tree silhouettes
+    cv2.ellipse(img, (w + 12, h - 18), (55, 85), 35, 180, 290, (14, 5, 18), 3, lineType=cv2.LINE_AA)
+    cv2.ellipse(img, (-12, h - 18), (55, 85), -35, 250, 360, (14, 5, 18), 3, lineType=cv2.LINE_AA)
 
-    # 4. Multi-layered neon beveled frame (Magenta + Sunset Peach)
-    # Outer dark chamfer
-    cv2.rectangle(img, (3, 3), (w - 4, h - 4), (32, 14, 40), 2, lineType=cv2.LINE_AA)
+    # 4. Beveled Neon Rim (Dark outer chamfer + hot magenta inner line)
+    cv2.rectangle(img, (2, 2), (w - 3, h - 3), (28, 10, 36), 3, lineType=cv2.LINE_AA)
     
-    # Neon glow line (magenta top/sides, golden peach bottom)
-    for y in range(8, h - 8):
-        t = y / float(h)
-        # Gradient color along border
-        edge_b = int(118 * (1 - t) + 68 * t)
-        edge_g = int(34 * (1 - t) + 160 * t)
-        edge_r = int(216 * (1 - t) + 255 * t)
-        color = (edge_b, edge_g, edge_r)
-        
-        if y == 8 or y == h - 9:
-            cv2.line(img, (8, y), (w - 9, y), color, 2, lineType=cv2.LINE_AA)
-        else:
-            img[y, 8] = color
-            img[y, 9] = color
-            img[y, w - 9] = color
-            img[y, w - 10] = color
+    # Inner glowing neon frame
+    cv2.rectangle(img, (5, 5), (w - 6, h - 6), C_MAGENTA, 2, lineType=cv2.LINE_AA)
+    cv2.rectangle(img, (7, 7), (w - 8, h - 8), (C_MAGENTA[0]//2, C_MAGENTA[1]//2, C_MAGENTA[2]//2), 1, lineType=cv2.LINE_AA)
 
-    # Soft ambient neon glow around the inner rim
-    glow_mask = np.zeros((h, w), dtype=np.uint8)
-    cv2.rectangle(glow_mask, (8, 8), (w - 9, h - 9), 255, 3, lineType=cv2.LINE_AA)
-    glow_blur = cv2.GaussianBlur(glow_mask, (9, 9), 0) / 255.0
-    for c, val in enumerate([70, 40, 180]): # BGR magenta-pink glow
-        img[:, :, c] = np.clip(img[:, :, c].astype(np.float32) + glow_blur * val, 0, 255).astype(np.uint8)
+    # Soft ambient neon edge bloom
+    edge_mask = np.zeros((h, w), dtype=np.uint8)
+    cv2.rectangle(edge_mask, (6, 6), (w - 7, h - 7), 255, 2, lineType=cv2.LINE_AA)
+    edge_blur = cv2.GaussianBlur(edge_mask, (11, 11), 0) / 255.0
+    for c, val in enumerate([70, 30, 160]):
+        img[:, :, c] = np.clip(img[:, :, c].astype(np.float32) + edge_blur * val, 0, 255).astype(np.uint8)
 
     return img
 
@@ -118,454 +96,649 @@ def enhance_2x(img):
     return cv2.addWeighted(upscaled, 1.25, gaussian, -0.25, 0)
 
 # ==============================================================================
-# SYMBOL DRAWING ENGINE (Clean neon vector glyphs)
+# BOLD SYMBOL DRAWING ENGINE (Large 95-120px Glyphs, 4-8px Line Weights)
 # ==============================================================================
 
-def draw_symbol_glyph(canvas, symbol_id, center=(93, 85), scale=1.0):
+def draw_bold_symbol(canvas, symbol_id, center=(93, 72), has_label=True):
     """
-    Renders clean, iconic vector symbols in crisp neon white with hot magenta/cyan glow.
+    Renders large, bold, punchy vector glyphs.
+    If has_label is True, center is at (93, 72) with scale ~0.9.
+    If has_label is False, center is at (93, 93) with scale ~1.2 (full keycap hero).
     """
     cx, cy = center
-    color_white = (255, 255, 255)
-    color_cyan = (255, 240, 0)
-    color_pink = (118, 34, 216)
-    color_gold = (68, 160, 255)
+    sc = 0.95 if has_label else 1.25
     
-    # --- GAMING ICONS ---
-    if symbol_id == "engine_ignition":
-        # Car Key / Ignition button
-        cv2.circle(canvas, (cx, cy - 8), int(18 * scale), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy - 24), (cx, cy - 10), color_cyan, 3, lineType=cv2.LINE_AA)
-        # Power symbol arc
-        cv2.ellipse(canvas, (cx, cy + 10), (int(16*scale), int(16*scale)), 0, 130, 410, color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy), (cx, cy + 12), color_white, 3, lineType=cv2.LINE_AA)
+    # Pre-render onto mask for neon drop glow
+    mask = np.zeros(canvas.shape[:2], dtype=np.uint8)
+    
+    # Temporary draw function for both mask and canvas
+    def render_geometry(target, is_mask=False):
+        c_w = 255 if is_mask else C_WHITE
+        c_c = 255 if is_mask else C_CYAN
+        c_m = 255 if is_mask else C_MAGENTA
+        c_g = 255 if is_mask else C_GOLD
+        c_r = 255 if is_mask else C_RED
+        c_gr = 255 if is_mask else C_GREEN
+        
+        # --- MEDIA & STREAM CONTROLS (From Ulanzi / OBS References) ---
+        if symbol_id == "play":
+            # Huge solid Play Triangle
+            pts = np.array([
+                [int(cx - 30 * sc), int(cy - 42 * sc)],
+                [int(cx + 42 * sc), int(cy)],
+                [int(cx - 30 * sc), int(cy + 42 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w if not is_mask else 255, lineType=cv2.LINE_AA)
+            if not is_mask:
+                cv2.polylines(target, [pts], True, c_c, 3, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "headlights_highbeam":
-        # Headlight bulb with 4 forward beam rays
-        cv2.ellipse(canvas, (cx - 10, cy), (int(16*scale), int(22*scale)), 0, 270, 90, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 10, cy - 22), (cx - 10, cy + 22), color_white, 2, lineType=cv2.LINE_AA)
-        # Horizontal parallel beam lines
-        for offset in [-16, -6, 4, 14]:
-            cv2.line(canvas, (cx + 6, cy + offset), (cx + 28, cy + offset), color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "pause":
+            # Two thick vertical rounded bars
+            bw = int(18 * sc)
+            bh = int(72 * sc)
+            gap = int(16 * sc)
+            x1 = cx - gap//2 - bw
+            x2 = cx + gap//2
+            cv2.rectangle(target, (x1, int(cy - bh//2)), (x1 + bw, int(cy + bh//2)), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (x2, int(cy - bh//2)), (x2 + bw, int(cy + bh//2)), c_w, -1, lineType=cv2.LINE_AA)
+            if not is_mask:
+                cv2.rectangle(target, (x1, int(cy - bh//2)), (x1 + bw, int(cy + bh//2)), c_c, 2, lineType=cv2.LINE_AA)
+                cv2.rectangle(target, (x2, int(cy - bh//2)), (x2 + bw, int(cy + bh//2)), c_c, 2, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "nitro_boost":
-        # NOS bottle + nitrous flame blast
-        cv2.rectangle(canvas, (cx - 16, cy - 18), (cx + 4, cy + 22), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 10, cy - 26), (cx - 2, cy - 18), color_cyan, -1, lineType=cv2.LINE_AA)
-        # Flame streaks
-        pts = np.array([[cx + 6, cy - 10], [cx + 26, cy - 14], [cx + 18, cy + 2], [cx + 30, cy + 6], [cx + 8, cy + 18]], np.int32)
-        cv2.polylines(canvas, [pts], False, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "play_next":
+            # Next track (>|)
+            pts = np.array([
+                [int(cx - 28 * sc), int(cy - 36 * sc)],
+                [int(cx + 12 * sc), int(cy)],
+                [int(cx - 28 * sc), int(cy + 36 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx + 18 * sc), int(cy - 36 * sc)), (int(cx + 28 * sc), int(cy + 36 * sc)), c_c, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "handbrake_drift":
-        # Brake disc (circle with exclamation point) + tire skid curves
-        cv2.circle(canvas, (cx - 4, cy), int(20*scale), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 4, cy), int(12*scale), color_pink, 1, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 4, cy - 7), (cx - 4, cy + 2), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 4, cy + 6), 1, color_white, -1, lineType=cv2.LINE_AA)
-        # Skid marks
-        cv2.ellipse(canvas, (cx + 18, cy + 12), (16, 22), -25, 180, 290, color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.ellipse(canvas, (cx + 24, cy + 16), (16, 22), -25, 180, 290, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "play_prev":
+            # Previous track (|<)
+            pts = np.array([
+                [int(cx + 28 * sc), int(cy - 36 * sc)],
+                [int(cx - 12 * sc), int(cy)],
+                [int(cx + 28 * sc), int(cy + 36 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 28 * sc), int(cy - 36 * sc)), (int(cx - 18 * sc), int(cy + 36 * sc)), c_c, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "radio_next":
-        # Musical Eighth note + forward arrows (>>)
-        cv2.circle(canvas, (cx - 16, cy + 14), 6, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 2, cy + 10), 6, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 10, cy + 14), (cx - 10, cy - 16), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx + 4, cy + 10), (cx + 4, cy - 20), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 10, cy - 16), (cx + 4, cy - 20), color_cyan, 3, lineType=cv2.LINE_AA)
-        # >> arrows
-        for off in [12, 22]:
-            pts = np.array([[cx + off, cy - 10], [cx + off + 8, cy], [cx + off, cy + 10]], np.int32)
-            cv2.polylines(canvas, [pts], False, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "skip_forward":
+            # Fast-forward double arrows (>>)
+            for off in [-16, 14]:
+                pts = np.array([
+                    [int((cx + off - 18) * sc), int((cy - 34) * sc)],
+                    [int((cx + off + 14) * sc), int(cy * sc)],
+                    [int((cx + off - 18) * sc), int((cy + 34) * sc)]
+                ], np.int32)
+                cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "cinematic_cam":
-        # Retro 35mm movie camera
-        cv2.rectangle(canvas, (cx - 18, cy - 10), (cx + 10, cy + 16), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 10, cy - 18), 8, color_pink, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx + 2, cy - 18), 8, color_pink, 2, lineType=cv2.LINE_AA)
-        # Trapezoid lens
-        pts = np.array([[cx + 10, cy - 2], [cx + 26, cy - 12], [cx + 26, cy + 18], [cx + 10, cy + 8]], np.int32)
-        cv2.polylines(canvas, [pts], True, color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "alert_bell":
+            # Solid prominent notification bell
+            pts = np.array([
+                [int(cx - 32 * sc), int(cy + 24 * sc)],
+                [int(cx + 32 * sc), int(cy + 24 * sc)],
+                [int(cx + 24 * sc), int(cy + 16 * sc)],
+                [int(cx + 20 * sc), int(cy - 12 * sc)],
+                [int(cx), int(cy - 36 * sc)],
+                [int(cx - 20 * sc), int(cy - 12 * sc)],
+                [int(cx - 24 * sc), int(cy + 16 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy - 36 * sc)), int(6 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy + 30 * sc)), int(7 * sc), c_g, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "vtol_landing_gear":
-        # Jet airplane silhouette with landing gear wheels down
-        cv2.line(canvas, (cx, cy - 24), (cx, cy + 16), color_white, 3, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 24, cy - 4), (cx + 24, cy - 4), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 12, cy + 14), (cx + 12, cy + 14), color_white, 2, lineType=cv2.LINE_AA)
-        # Landing gear wheels
-        cv2.circle(canvas, (cx, cy + 22), 3, color_gold, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 14, cy + 6), 3, color_gold, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx + 14, cy + 6), 3, color_gold, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "alert_mute":
+            # Bell with red slash
+            pts = np.array([
+                [int(cx - 32 * sc), int(cy + 24 * sc)],
+                [int(cx + 32 * sc), int(cy + 24 * sc)],
+                [int(cx + 24 * sc), int(cy + 16 * sc)],
+                [int(cx + 20 * sc), int(cy - 12 * sc)],
+                [int(cx), int(cy - 36 * sc)],
+                [int(cx - 20 * sc), int(cy - 12 * sc)],
+                [int(cx - 24 * sc), int(cy + 16 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy - 36 * sc)), int(6 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy + 30 * sc)), int(7 * sc), c_g, -1, lineType=cv2.LINE_AA)
+            # Red slash across
+            cv2.line(target, (int(cx - 36 * sc), int(cy + 36 * sc)), (int(cx + 36 * sc), int(cy - 36 * sc)), c_r, int(6 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "vehicle_lock":
-        # Sports car coupe silhouette with lock on top
-        cv2.rectangle(canvas, (cx - 10, cy - 20), (cx + 10, cy - 6), color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy - 20), 7, color_gold, 2, lineType=cv2.LINE_AA)
-        # Car body
-        cv2.line(canvas, (cx - 26, cy + 12), (cx + 26, cy + 12), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.ellipse(canvas, (cx, cy + 8), (24, 10), 0, 180, 360, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 16, cy + 14), 5, color_pink, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx + 16, cy + 14), 5, color_pink, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "scene_switch":
+            # Overlapping Scene windows
+            w_box, h_box = int(48 * sc), int(36 * sc)
+            # Back window
+            cv2.rectangle(target, (int(cx - 18 * sc), int(cy - 28 * sc)), (int(cx - 18 * sc + w_box), int(cy - 28 * sc + h_box)), c_m, int(4 * sc), lineType=cv2.LINE_AA)
+            # Front window (filled)
+            cv2.rectangle(target, (int(cx - 30 * sc), int(cy - 12 * sc)), (int(cx - 30 * sc + w_box), int(cy - 12 * sc + h_box)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 24 * sc), int(cy + 4 * sc)), (int(cx - 24 * sc + 18 * sc), int(cy + 14 * sc)), c_c, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "weapon_wheel":
-        # Radial weapon wheel with 8 segments and central crosshair
-        cv2.circle(canvas, (cx, cy), 24, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy), 8, color_cyan, 1, lineType=cv2.LINE_AA)
-        for angle in range(0, 360, 45):
-            rad = math.radians(angle)
-            x1 = int(cx + 8 * math.cos(rad))
-            y1 = int(cy + 8 * math.sin(rad))
-            x2 = int(cx + 24 * math.cos(rad))
-            y2 = int(cy + 24 * math.sin(rad))
-            cv2.line(canvas, (x1, y1), (x2, y2), color_pink, 1, lineType=cv2.LINE_AA)
+        elif symbol_id == "record":
+            # Heavy video camera with glowing red record dot
+            cv2.rectangle(target, (int(cx - 36 * sc), int(cy - 22 * sc)), (int(cx + 10 * sc), int(cy + 24 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            # Lens cone
+            pts = np.array([
+                [int(cx + 10 * sc), int(cy - 8 * sc)],
+                [int(cx + 36 * sc), int(cy - 24 * sc)],
+                [int(cx + 36 * sc), int(cy + 26 * sc)],
+                [int(cx + 10 * sc), int(cy + 10 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            # Red record circle inside
+            cv2.circle(target, (int(cx - 13 * sc), int(cy + 1 * sc)), int(11 * sc), c_r, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "pistol_sidearm":
-        # Handgun silhouette
-        pts = np.array([
-            [cx - 20, cy - 14], [cx + 16, cy - 14], [cx + 16, cy - 4],
-            [cx + 4, cy - 2], [cx - 2, cy + 18], [cx - 14, cy + 18],
-            [cx - 8, cy - 2], [cx - 20, cy - 4]
-        ], np.int32)
-        cv2.polylines(canvas, [pts], True, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx + 2, cy - 2), (cx + 8, cy + 6), color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "stream":
+            # Broadcast camera with radio signal arcs
+            cv2.rectangle(target, (int(cx - 32 * sc), int(cy - 20 * sc)), (int(cx + 14 * sc), int(cy + 22 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            pts = np.array([
+                [int(cx + 14 * sc), int(cy - 6 * sc)],
+                [int(cx + 36 * sc), int(cy - 20 * sc)],
+                [int(cx + 36 * sc), int(cy + 22 * sc)],
+                [int(cx + 14 * sc), int(cy + 8 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
+            # Broadcast waves above
+            cv2.ellipse(target, (int(cx - 9 * sc), int(cy - 28 * sc)), (int(14 * sc), int(10 * sc)), 0, 190, 350, c_g, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "assault_rifle":
-        # Tactical Assault rifle silhouette
-        cv2.line(canvas, (cx - 26, cy - 4), (cx + 26, cy - 4), color_white, 3, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 20, cy - 4), (cx - 28, cy + 12), color_white, 2, lineType=cv2.LINE_AA) # Stock
-        cv2.line(canvas, (cx - 6, cy - 4), (cx - 10, cy + 14), color_pink, 3, lineType=cv2.LINE_AA)   # Magazine
-        cv2.line(canvas, (cx + 6, cy - 4), (cx + 2, cy + 10), color_white, 2, lineType=cv2.LINE_AA)   # Grip
-        cv2.line(canvas, (cx - 2, cy - 10), (cx + 12, cy - 10), color_cyan, 2, lineType=cv2.LINE_AA) # Optic
+        elif symbol_id == "virtual_cam":
+            # Webcam lens on circular pedestal
+            cv2.circle(target, (cx, int(cy - 12 * sc)), int(26 * sc), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy - 12 * sc)), int(12 * sc), c_c, -1, lineType=cv2.LINE_AA)
+            # Pedestal
+            pts = np.array([
+                [int(cx - 34 * sc), int(cy + 30 * sc)],
+                [int(cx + 34 * sc), int(cy + 30 * sc)],
+                [int(cx + 20 * sc), int(cy + 16 * sc)],
+                [int(cx - 20 * sc), int(cy + 16 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_m, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "sniper_scope":
-        # Precision crosshair reticle
-        cv2.circle(canvas, (cx, cy), 22, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy), 12, color_pink, 1, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 26, cy), (cx + 26, cy), color_cyan, 1, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy - 26), (cx, cy + 26), color_cyan, 1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy), 2, color_white, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "studio_mode":
+            # Monitor with audio/level sliders
+            cv2.rectangle(target, (int(cx - 38 * sc), int(cy - 30 * sc)), (int(cx + 38 * sc), int(cy + 18 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 16 * sc), int(cy + 24 * sc)), (int(cx + 16 * sc), int(cy + 24 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            # Sliders inside
+            for sx, sh in [(-22, 10), (-6, 18), (10, 14), (26, 22)]:
+                cv2.line(target, (int((cx + sx) * sc), int((cy + 10) * sc)), (int((cx + sx) * sc), int((cy + 10 - sh) * sc)), c_c, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "explosive_c4":
-        # C4 Brick with digital timer and wires
-        cv2.rectangle(canvas, (cx - 18, cy - 12), (cx + 18, cy + 16), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 10, cy - 6), (cx + 10, cy + 4), color_pink, -1, lineType=cv2.LINE_AA)
-        cv2.putText(canvas, "88", (cx - 8, cy + 2), cv2.FONT_HERSHEY_SIMPLEX, 0.35, color_white, 1, lineType=cv2.LINE_AA)
-        # Wires
-        cv2.ellipse(canvas, (cx, cy - 16), (12, 8), 0, 180, 360, color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "reload_overlays":
+            # Bold circular reload/refresh arrows
+            cv2.ellipse(target, (cx, cy), (int(34 * sc), int(34 * sc)), 0, 30, 310, c_c, int(6 * sc), lineType=cv2.LINE_AA)
+            # Arrowhead
+            pts = np.array([
+                [int(cx + 24 * sc), int(cy - 38 * sc)],
+                [int(cx + 44 * sc), int(cy - 24 * sc)],
+                [int(cx + 26 * sc), int(cy - 12 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "armor_vest":
-        # Body Armor vest
-        pts = np.array([
-            [cx - 14, cy - 20], [cx - 6, cy - 20], [cx - 4, cy - 10], [cx + 4, cy - 10],
-            [cx + 6, cy - 20], [cx + 14, cy - 20], [cx + 22, cy - 4], [cx + 16, cy + 18],
-            [cx - 16, cy + 18], [cx - 22, cy - 4]
-        ], np.int32)
-        cv2.polylines(canvas, [pts], True, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 10, cy), (cx + 10, cy), color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 10, cy + 8), (cx + 10, cy + 8), color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "viewer_requests":
+            # Speech bubble with chat text dots
+            cv2.rectangle(target, (int(cx - 36 * sc), int(cy - 26 * sc)), (int(cx + 36 * sc), int(cy + 16 * sc)), c_c, int(5 * sc), lineType=cv2.LINE_AA)
+            # Tail
+            pts = np.array([
+                [int(cx - 16 * sc), int(cy + 16 * sc)],
+                [int(cx - 26 * sc), int(cy + 34 * sc)],
+                [int(cx + 2 * sc), int(cy + 16 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
+            # Dots
+            for dx in [-18, 0, 18]:
+                cv2.circle(target, (int((cx + dx) * sc), int((cy - 5) * sc)), int(4 * sc), c_w, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "health_snack":
-        # First Aid Cross & snack soda can
-        # Cross
-        cv2.rectangle(canvas, (cx - 7, cy - 20), (cx + 7, cy + 14), color_pink, -1, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 17, cy - 10), (cx + 17, cy + 4), color_pink, -1, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 7, cy - 20), (cx + 7, cy + 14), color_white, 1, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 17, cy - 10), (cx + 17, cy + 4), color_white, 1, lineType=cv2.LINE_AA)
-        # Heart pulse line
-        pts = np.array([[cx - 24, cy + 18], [cx - 12, cy + 18], [cx - 6, cy + 8], [cx, cy + 24], [cx + 8, cy + 14], [cx + 24, cy + 18]], np.int32)
-        cv2.polylines(canvas, [pts], False, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "widget_toggle":
+            # Gear settings with checkmark
+            cv2.circle(target, (cx, cy), int(26 * sc), c_c, int(5 * sc), lineType=cv2.LINE_AA)
+            for angle in range(0, 360, 45):
+                rad = math.radians(angle)
+                x1 = int(cx + 26 * sc * math.cos(rad))
+                y1 = int(cy + 26 * sc * math.sin(rad))
+                x2 = int(cx + 36 * sc * math.cos(rad))
+                y2 = int(cy + 36 * sc * math.sin(rad))
+                cv2.line(target, (x1, y1), (x2, y2), c_c, int(5 * sc), lineType=cv2.LINE_AA)
+            # Checkmark inside
+            pts = np.array([[int(cx - 14 * sc), cy], [int(cx - 4 * sc), int(cy + 10 * sc)], [int(cx + 14 * sc), int(cy - 12 * sc)]], np.int32)
+            cv2.polylines(target, [pts], False, c_gr, int(5 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "wanted_stars":
-        # 5-pointed star with police siren slash
-        pts = []
-        for i in range(10):
-            r = 22 if i % 2 == 0 else 9
-            angle = i * 36 - 90
-            rad = math.radians(angle)
-            pts.append([int(cx + r * math.cos(rad)), int(cy + r * math.sin(rad))])
-        cv2.polylines(canvas, [np.array(pts, np.int32)], True, color_gold, 2, lineType=cv2.LINE_AA)
-        # Red/blue slash
-        cv2.line(canvas, (cx - 20, cy + 20), (cx + 20, cy - 20), color_cyan, 3, lineType=cv2.LINE_AA)
+        elif symbol_id == "video_toggle":
+            # Eye with glowing pupil
+            pts_top = []
+            pts_bot = []
+            for t in np.linspace(-1, 1, 20):
+                x = int(cx + t * 40 * sc)
+                y_top = int(cy - (1 - t*t) * 26 * sc)
+                y_bot = int(cy + (1 - t*t) * 26 * sc)
+                pts_top.append([x, y_top])
+                pts_bot.append([x, y_bot])
+            all_pts = pts_top + pts_bot[::-1]
+            cv2.polylines(target, [np.array(all_pts, np.int32)], True, c_c, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, cy), int(14 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, cy), int(6 * sc), c_m, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "ifruit_phone":
-        # Smartphone with notch and apps
-        cv2.rectangle(canvas, (cx - 14, cy - 24), (cx + 14, cy + 24), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 10, cy - 18), (cx + 10, cy + 16), color_pink, 1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy + 20), 2, color_white, -1, lineType=cv2.LINE_AA)
-        # App dots
-        for dy in [-12, -4, 4]:
-            for dx in [-5, 5]:
-                cv2.circle(canvas, (cx + dx, cy + dy), 1, color_cyan, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "volume_up":
+            # Speaker with plus (+)
+            cv2.rectangle(target, (int(cx - 36 * sc), int(cy - 14 * sc)), (int(cx - 20 * sc), int(cy + 14 * sc)), c_c, -1, lineType=cv2.LINE_AA)
+            pts = np.array([
+                [int(cx - 20 * sc), int(cy - 14 * sc)],
+                [int(cx - 2 * sc), int(cy - 30 * sc)],
+                [int(cx - 2 * sc), int(cy + 30 * sc)],
+                [int(cx - 20 * sc), int(cy + 14 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
+            # Plus
+            cv2.line(target, (int(cx + 14 * sc), cy), (int(cx + 34 * sc), cy), c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx + 24 * sc), int(cy - 10 * sc)), (int(cx + 24 * sc), int(cy + 10 * sc)), c_w, int(6 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "interaction_menu":
-        # Radial gear / 'M' key badge
-        cv2.circle(canvas, (cx, cy), 18, color_white, 2, lineType=cv2.LINE_AA)
-        for angle in range(0, 360, 45):
-            rad = math.radians(angle)
-            x1 = int(cx + 18 * math.cos(rad))
-            y1 = int(cy + 18 * math.sin(rad))
-            x2 = int(cx + 23 * math.cos(rad))
-            y2 = int(cy + 23 * math.sin(rad))
-            cv2.line(canvas, (x1, y1), (x2, y2), color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.putText(canvas, "M", (cx - 7, cy + 6), cv2.FONT_HERSHEY_DUPLEX, 0.6, color_cyan, 1, lineType=cv2.LINE_AA)
+        elif symbol_id == "volume_down":
+            # Speaker with minus (-)
+            cv2.rectangle(target, (int(cx - 36 * sc), int(cy - 14 * sc)), (int(cx - 20 * sc), int(cy + 14 * sc)), c_c, -1, lineType=cv2.LINE_AA)
+            pts = np.array([
+                [int(cx - 20 * sc), int(cy - 14 * sc)],
+                [int(cx - 2 * sc), int(cy - 30 * sc)],
+                [int(cx - 2 * sc), int(cy + 30 * sc)],
+                [int(cx - 20 * sc), int(cy + 14 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
+            # Minus
+            cv2.line(target, (int(cx + 14 * sc), cy), (int(cx + 34 * sc), cy), c_w, int(6 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "map_gps_waypoint":
-        # Location Pin with circular radar waves
-        cv2.circle(canvas, (cx, cy - 8), 12, color_pink, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy - 8), 4, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 8, cy - 2), (cx, cy + 16), color_pink, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx + 8, cy - 2), (cx, cy + 16), color_pink, 2, lineType=cv2.LINE_AA)
-        # Radar ground ring
-        cv2.ellipse(canvas, (cx, cy + 18), (20, 6), 0, 0, 360, color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "volume_mute":
+            # Speaker with slash
+            cv2.rectangle(target, (int(cx - 36 * sc), int(cy - 14 * sc)), (int(cx - 20 * sc), int(cy + 14 * sc)), c_m, -1, lineType=cv2.LINE_AA)
+            pts = np.array([
+                [int(cx - 20 * sc), int(cy - 14 * sc)],
+                [int(cx - 2 * sc), int(cy - 30 * sc)],
+                [int(cx - 2 * sc), int(cy + 30 * sc)],
+                [int(cx - 20 * sc), int(cy + 14 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_m, lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx + 10 * sc), int(cy - 20 * sc)), (int(cx + 34 * sc), int(cy + 20 * sc)), c_r, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx + 34 * sc), int(cy - 20 * sc)), (int(cx + 10 * sc), int(cy + 20 * sc)), c_r, int(6 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "duffel_bag_loot":
-        # Heist duffel bag with handles and dollar mark
-        cv2.rectangle(canvas, (cx - 20, cy - 8), (cx + 20, cy + 16), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.ellipse(canvas, (cx, cy - 8), (12, 10), 0, 180, 360, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.putText(canvas, "$", (cx - 6, cy + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "volume_levels":
+            # Speaker with dynamic soundwaves
+            cv2.rectangle(target, (int(cx - 36 * sc), int(cy - 14 * sc)), (int(cx - 20 * sc), int(cy + 14 * sc)), c_c, -1, lineType=cv2.LINE_AA)
+            pts = np.array([
+                [int(cx - 20 * sc), int(cy - 14 * sc)],
+                [int(cx - 2 * sc), int(cy - 30 * sc)],
+                [int(cx - 2 * sc), int(cy + 30 * sc)],
+                [int(cx - 20 * sc), int(cy + 14 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
+            # 3 soundwave arcs
+            cv2.ellipse(target, (int(cx + 6 * sc), cy), (int(12 * sc), int(16 * sc)), 0, -45, 45, c_g, int(4 * sc), lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (int(cx + 6 * sc), cy), (int(22 * sc), int(26 * sc)), 0, -45, 45, c_g, int(4 * sc), lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (int(cx + 6 * sc), cy), (int(32 * sc), int(36 * sc)), 0, -45, 45, c_g, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "hack_device":
-        # Cyber skull / USB bypass device
-        cv2.circle(canvas, (cx, cy - 6), 14, color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 5, cy - 6), 3, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx + 5, cy - 6), 3, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 8, cy + 4), (cx + 8, cy + 14), color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 3, cy + 4), (cx - 3, cy + 14), color_cyan, 1)
-        cv2.line(canvas, (cx + 3, cy + 4), (cx + 3, cy + 14), color_cyan, 1)
+        elif symbol_id == "mic_mute":
+            # Bold studio microphone
+            cv2.rectangle(target, (int(cx - 14 * sc), int(cy - 36 * sc)), (int(cx + 14 * sc), int(cy + 4 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy - 36 * sc)), int(14 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (cx, int(cy - 4 * sc)), (int(24 * sc), int(24 * sc)), 0, 0, 180, c_c, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (cx, int(cy + 20 * sc)), (cx, int(cy + 36 * sc)), c_c, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 18 * sc), int(cy + 36 * sc)), (int(cx + 18 * sc), int(cy + 36 * sc)), c_c, int(5 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "hands_up_rp":
-        # Figure with hands raised in air
-        cv2.circle(canvas, (cx, cy - 14), 7, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy - 7), (cx, cy + 18), color_white, 2, lineType=cv2.LINE_AA)
-        # Arms raised
-        cv2.line(canvas, (cx, cy - 2), (cx - 18, cy - 18), color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy - 2), (cx + 18, cy - 18), color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "headphone_deafen":
+            # DJ Headphones with slash
+            cv2.ellipse(target, (cx, int(cy - 4 * sc)), (int(32 * sc), int(32 * sc)), 0, 180, 360, c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 38 * sc), int(cy - 8 * sc)), (int(cx - 24 * sc), int(cy + 24 * sc)), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx + 24 * sc), int(cy - 8 * sc)), (int(cx + 38 * sc), int(cy + 24 * sc)), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 30 * sc), int(cy + 30 * sc)), (int(cx + 30 * sc), int(cy - 30 * sc)), c_r, int(6 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "mask_bandana":
-        # Bandit bandana triangle
-        pts = np.array([[cx - 20, cy - 12], [cx + 20, cy - 12], [cx, cy + 18]], np.int32)
-        cv2.polylines(canvas, [pts], True, color_pink, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 10, cy - 2), 2, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx + 10, cy - 2), 2, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy + 6), 2, color_white, -1, lineType=cv2.LINE_AA)
+        # --- GTA VI GAMING ICONS (Heavy 95-120px Glyphs) ---
+        elif symbol_id == "engine_ignition":
+            # Bold Car Key & Ignition Ring
+            cv2.circle(target, (cx, int(cy - 12 * sc)), int(24 * sc), c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (cx, int(cy + 14 * sc)), (int(26 * sc), int(26 * sc)), 0, 130, 410, c_g, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (cx, int(cy - 2 * sc)), (cx, int(cy + 18 * sc)), c_w, int(6 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "screenshot_snap":
-        # Camera / Clapperboard snap
-        cv2.rectangle(canvas, (cx - 20, cy - 12), (cx + 20, cy + 16), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy + 2), 9, color_cyan, 2, lineType=cv2.LINE_AA)
-        # Top flash
-        cv2.circle(canvas, (cx + 12, cy - 6), 3, color_gold, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "headlights_highbeam":
+            # Bold Headlight beam
+            cv2.ellipse(target, (int(cx - 14 * sc), cy), (int(22 * sc), int(32 * sc)), 0, 270, 90, c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 14 * sc), int(cy - 32 * sc)), (int(cx - 14 * sc), int(cy + 32 * sc)), c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            for off in [-24, -8, 8, 24]:
+                cv2.line(target, (int((cx + 10) * sc), int((cy + off) * sc)), (int((cx + 42) * sc), int((cy + off) * sc)), c_c, int(5 * sc), lineType=cv2.LINE_AA)
 
-    # --- STREAMING ICONS ---
-    elif symbol_id == "scene_starting":
-        # Rising neon sun over horizon with palm tree
-        cv2.circle(canvas, (cx, cy), 18, color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 26, cy + 8), (cx + 26, cy + 8), color_pink, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 20, cy + 14), (cx + 20, cy + 14), color_pink, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "nitro_boost":
+            # Nitro bottle & flame blast
+            cv2.rectangle(target, (int(cx - 26 * sc), int(cy - 24 * sc)), (int(cx + 4 * sc), int(cy + 32 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 18 * sc), int(cy - 36 * sc)), (int(cx - 4 * sc), int(cy - 24 * sc)), c_c, -1, lineType=cv2.LINE_AA)
+            # Chunky turbo flame
+            pts = np.array([
+                [int(cx + 8 * sc), int(cy - 14 * sc)],
+                [int(cx + 40 * sc), int(cy - 22 * sc)],
+                [int(cx + 26 * sc), int(cy)],
+                [int(cx + 44 * sc), int(cy + 8 * sc)],
+                [int(cx + 10 * sc), int(cy + 26 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_g, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "scene_gameplay":
-        # Gamepad controller
-        cv2.rectangle(canvas, (cx - 18, cy - 10), (cx + 18, cy + 12), color_white, 2, lineType=cv2.LINE_AA)
-        # D-pad
-        cv2.line(canvas, (cx - 10, cy - 5), (cx - 10, cy + 7), color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 16, cy + 1), (cx - 4, cy + 1), color_cyan, 2, lineType=cv2.LINE_AA)
-        # Action buttons
-        cv2.circle(canvas, (cx + 10, cy - 2), 2, color_pink, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx + 10, cy + 6), 2, color_gold, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "handbrake_drift":
+            # Brake disc with drift curves
+            cv2.circle(target, (int(cx - 8 * sc), cy), int(28 * sc), c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 8 * sc), int(cy - 12 * sc)), (int(cx - 8 * sc), int(cy + 4 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx - 8 * sc), int(cy + 12 * sc)), int(3 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            # Heavy drift arcs
+            cv2.ellipse(target, (int(cx + 24 * sc), int(cy + 12 * sc)), (int(20 * sc), int(30 * sc)), -25, 180, 290, c_g, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (int(cx + 32 * sc), int(cy + 18 * sc)), (int(20 * sc), int(30 * sc)), -25, 180, 290, c_g, int(5 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "scene_chatting":
-        # Dual chatting speech bubbles
-        cv2.ellipse(canvas, (cx - 6, cy - 6), (16, 12), 0, 0, 360, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.ellipse(canvas, (cx + 10, cy + 8), (14, 10), 0, 0, 360, color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "vice_radio":
+            # Vice City radio station note & dial
+            cv2.circle(target, (int(cx - 22 * sc), int(cy + 16 * sc)), int(10 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx - 2 * sc), int(cy + 10 * sc)), int(10 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 12 * sc), int(cy + 16 * sc)), (int(cx - 12 * sc), int(cy - 26 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx + 8 * sc), int(cy + 10 * sc)), (int(cx + 8 * sc), int(cy - 32 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 12 * sc), int(cy - 26 * sc)), (int(cx + 8 * sc), int(cy - 32 * sc)), c_c, int(6 * sc), lineType=cv2.LINE_AA)
+            # >> fast forward
+            for off in [18, 32]:
+                pts = np.array([
+                    [int((cx + off) * sc), int((cy - 12) * sc)],
+                    [int((cx + off + 12) * sc), int(cy * sc)],
+                    [int((cx + off) * sc), int((cy + 12) * sc)]
+                ], np.int32)
+                cv2.fillPoly(target, [pts], c_g, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "scene_brb":
-        # Neon tropical cocktail glass (Martini with straw)
-        pts = np.array([[cx - 18, cy - 18], [cx + 18, cy - 18], [cx, cy + 4]], np.int32)
-        cv2.polylines(canvas, [pts], True, color_pink, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy + 4), (cx, cy + 18), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 10, cy + 18), (cx + 10, cy + 18), color_white, 2, lineType=cv2.LINE_AA)
-        # Neon straw
-        cv2.line(canvas, (cx - 4, cy), (cx + 16, cy - 26), color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "cinematic_cam":
+            # 35mm Movie camera
+            cv2.rectangle(target, (int(cx - 28 * sc), int(cy - 16 * sc)), (int(cx + 12 * sc), int(cy + 22 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx - 16 * sc), int(cy - 26 * sc)), int(11 * sc), c_m, int(4 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx + 2 * sc), int(cy - 26 * sc)), int(11 * sc), c_m, int(4 * sc), lineType=cv2.LINE_AA)
+            pts = np.array([
+                [int(cx + 12 * sc), int(cy - 4 * sc)],
+                [int(cx + 36 * sc), int(cy - 20 * sc)],
+                [int(cx + 36 * sc), int(cy + 26 * sc)],
+                [int(cx + 12 * sc), int(cy + 10 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_c, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "scene_ending":
-        # Vice City skyline with crescent moon
-        # Buildings
-        cv2.rectangle(canvas, (cx - 22, cy - 4), (cx - 10, cy + 20), color_pink, -1, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 8, cy - 16), (cx + 4, cy + 20), color_cyan, -1, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx + 6, cy - 8), (cx + 18, cy + 20), color_pink, -1, lineType=cv2.LINE_AA)
-        # Moon
-        cv2.circle(canvas, (cx - 10, cy - 18), 8, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "vtol_landing_gear":
+            # Aircraft jet & wheels
+            cv2.line(target, (cx, int(cy - 34 * sc)), (cx, int(cy + 20 * sc)), c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 36 * sc), int(cy - 6 * sc)), (int(cx + 36 * sc), int(cy - 6 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 18 * sc), int(cy + 18 * sc)), (int(cx + 18 * sc), int(cy + 18 * sc)), c_w, int(4 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy + 30 * sc)), int(5 * sc), c_g, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx - 20 * sc), int(cy + 8 * sc)), int(5 * sc), c_g, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx + 20 * sc), int(cy + 8 * sc)), int(5 * sc), c_g, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "mic_toggle":
-        # Broadcast condenser mic with toggle slash
-        cv2.rectangle(canvas, (cx - 8, cy - 22), (cx + 8, cy + 2), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy - 22), 8, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.ellipse(canvas, (cx, cy - 4), (14, 14), 0, 0, 180, color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy + 10), (cx, cy + 20), color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 8, cy + 20), (cx + 8, cy + 20), color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "vehicle_lock":
+            # Sports car with padlock
+            cv2.rectangle(target, (int(cx - 14 * sc), int(cy - 28 * sc)), (int(cx + 14 * sc), int(cy - 8 * sc)), c_g, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy - 28 * sc)), int(11 * sc), c_g, int(4 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 36 * sc), int(cy + 18 * sc)), (int(cx + 36 * sc), int(cy + 18 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (cx, int(cy + 12 * sc)), (int(34 * sc), int(14 * sc)), 0, 180, 360, c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx - 22 * sc), int(cy + 20 * sc)), int(7 * sc), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx + 22 * sc), int(cy + 20 * sc)), int(7 * sc), c_m, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "headphone_deafen":
-        # DJ Headphones with slash
-        cv2.ellipse(canvas, (cx, cy - 2), (20, 20), 0, 180, 360, color_white, 3, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 24, cy - 4), (cx - 16, cy + 16), color_pink, -1, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx + 16, cy - 4), (cx + 24, cy + 16), color_pink, -1, lineType=cv2.LINE_AA)
-        # Deafen red slash
-        cv2.line(canvas, (cx - 18, cy + 18), (cx + 18, cy - 18), color_gold, 3, lineType=cv2.LINE_AA)
+        elif symbol_id == "weapon_wheel":
+            # Radial 8-slot weapon wheel
+            cv2.circle(target, (cx, cy), int(34 * sc), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, cy), int(12 * sc), c_c, int(3 * sc), lineType=cv2.LINE_AA)
+            for angle in range(0, 360, 45):
+                rad = math.radians(angle)
+                x1 = int(cx + 12 * sc * math.cos(rad))
+                y1 = int(cy + 12 * sc * math.sin(rad))
+                x2 = int(cx + 34 * sc * math.cos(rad))
+                y2 = int(cy + 34 * sc * math.sin(rad))
+                cv2.line(target, (x1, y1), (x2, y2), c_m, int(3 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "discord_ptt":
-        # Discord controller mask
-        cv2.ellipse(canvas, (cx, cy), (22, 14), 0, 0, 360, color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 8, cy), 4, color_white, -1, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx + 8, cy), 4, color_white, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "pistol_sidearm":
+            # Heavy Handgun silhouette
+            pts = np.array([
+                [int(cx - 30 * sc), int(cy - 18 * sc)],
+                [int(cx + 26 * sc), int(cy - 18 * sc)],
+                [int(cx + 26 * sc), int(cy - 4 * sc)],
+                [int(cx + 8 * sc), int(cy)],
+                [int(cx - 2 * sc), int(cy + 30 * sc)],
+                [int(cx - 20 * sc), int(cy + 30 * sc)],
+                [int(cx - 12 * sc), int(cy)],
+                [int(cx - 30 * sc), int(cy - 4 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx + 4 * sc), cy), (int(cx + 12 * sc), int(cy + 12 * sc)), c_c, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "music_spotify":
-        # Vinyl record with music audio wave
-        cv2.circle(canvas, (cx, cy), 22, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy), 8, color_gold, -1, lineType=cv2.LINE_AA)
-        for h_off in [-14, -8, 8, 14]:
-            cv2.ellipse(canvas, (cx, cy), (int(abs(h_off)*1.3), int(abs(h_off)*1.3)), 0, 0, 360, color_pink, 1, lineType=cv2.LINE_AA)
+        elif symbol_id == "assault_rifle":
+            # Tactical Carbine Rifle
+            cv2.line(target, (int(cx - 40 * sc), int(cy - 6 * sc)), (int(cx + 40 * sc), int(cy - 6 * sc)), c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 30 * sc), int(cy - 6 * sc)), (int(cx - 42 * sc), int(cy + 18 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 8 * sc), int(cy - 6 * sc)), (int(cx - 14 * sc), int(cy + 22 * sc)), c_m, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx + 10 * sc), int(cy - 6 * sc)), (int(cx + 4 * sc), int(cy + 16 * sc)), c_w, int(4 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 2 * sc), int(cy - 16 * sc)), (int(cx + 18 * sc), int(cy - 16 * sc)), c_c, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "soundboard_sfx":
-        # Megaphone / Airhorn burst
-        pts = np.array([[cx - 18, cy - 4], [cx, cy - 14], [cx, cy + 14], [cx - 18, cy + 4]], np.int32)
-        cv2.polylines(canvas, [pts], True, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.rectangle(canvas, (cx - 22, cy - 4), (cx - 18, cy + 4), color_pink, -1, lineType=cv2.LINE_AA)
-        # Audio burst arcs
-        cv2.ellipse(canvas, (cx + 4, cy), (10, 16), 0, -45, 45, color_cyan, 2, lineType=cv2.LINE_AA)
-        cv2.ellipse(canvas, (cx + 12, cy), (14, 22), 0, -45, 45, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "sniper_scope":
+            # Precision Crosshair
+            cv2.circle(target, (cx, cy), int(32 * sc), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, cy), int(16 * sc), c_m, int(3 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 38 * sc), cy), (int(cx + 38 * sc), cy), c_c, int(3 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (cx, int(cy - 38 * sc)), (cx, int(cy + 38 * sc)), c_c, int(3 * sc), lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, cy), int(4 * sc), c_w, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "voice_changer":
-        # Radio audio waves / Cyber mask
-        cv2.circle(canvas, (cx, cy), 18, color_white, 2, lineType=cv2.LINE_AA)
-        # Soundwave frequency bars
-        for dx, h_bar in [(-12, 6), (-6, 12), (0, 18), (6, 12), (12, 6)]:
-            cv2.line(canvas, (cx + dx, cy - h_bar), (cx + dx, cy + h_bar), color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "sticky_c4":
+            # C4 Brick with digital timer
+            cv2.rectangle(target, (int(cx - 28 * sc), int(cy - 18 * sc)), (int(cx + 28 * sc), int(cy + 24 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 16 * sc), int(cy - 8 * sc)), (int(cx + 16 * sc), int(cy + 8 * sc)), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.putText(target, "88", (int(cx - 12 * sc), int(cy + 6 * sc)), cv2.FONT_HERSHEY_DUPLEX, 0.55 * sc, c_w, 1, lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (cx, int(cy - 24 * sc)), (int(18 * sc), int(12 * sc)), 0, 180, 360, c_c, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "start_stop_stream":
-        # Satellite antenna tower with ON AIR rings
-        cv2.line(canvas, (cx, cy - 14), (cx - 16, cy + 20), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx, cy - 14), (cx + 16, cy + 20), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.line(canvas, (cx - 10, cy + 6), (cx + 10, cy + 6), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy - 14), 5, color_pink, -1, lineType=cv2.LINE_AA)
-        # Broadcast waves
-        cv2.ellipse(canvas, (cx, cy - 14), (14, 14), 0, 200, 340, color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.ellipse(canvas, (cx, cy - 14), (22, 22), 0, 200, 340, color_gold, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "heavy_armor":
+            # Heavy Tactical Ballistic Vest
+            pts = np.array([
+                [int(cx - 20 * sc), int(cy - 30 * sc)],
+                [int(cx - 8 * sc), int(cy - 30 * sc)],
+                [int(cx - 6 * sc), int(cy - 14 * sc)],
+                [int(cx + 6 * sc), int(cy - 14 * sc)],
+                [int(cx + 8 * sc), int(cy - 30 * sc)],
+                [int(cx + 20 * sc), int(cy - 30 * sc)],
+                [int(cx + 32 * sc), int(cy - 4 * sc)],
+                [int(cx + 24 * sc), int(cy + 28 * sc)],
+                [int(cx - 24 * sc), int(cy + 28 * sc)],
+                [int(cx - 32 * sc), int(cy - 4 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 16 * sc), cy), (int(cx + 16 * sc), cy), c_c, int(4 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 16 * sc), int(cy + 12 * sc)), (int(cx + 16 * sc), int(cy + 12 * sc)), c_c, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "record_replay":
-        # Instant Replay (circular rewind arrow + 30s)
-        cv2.ellipse(canvas, (cx, cy), (20, 20), 0, 45, 315, color_cyan, 2, lineType=cv2.LINE_AA)
-        # Arrowhead
-        pts = np.array([[cx + 10, cy - 20], [cx + 20, cy - 14], [cx + 16, cy - 26]], np.int32)
-        cv2.fillPoly(canvas, [pts], color_cyan, lineType=cv2.LINE_AA)
-        cv2.putText(canvas, "30s", (cx - 14, cy + 5), cv2.FONT_HERSHEY_DUPLEX, 0.45, color_white, 1, lineType=cv2.LINE_AA)
+        elif symbol_id == "snack_heal":
+            # First Aid Cross
+            cv2.rectangle(target, (int(cx - 12 * sc), int(cy - 32 * sc)), (int(cx + 12 * sc), int(cy + 22 * sc)), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 28 * sc), int(cy - 16 * sc)), (int(cx + 28 * sc), int(cy + 6 * sc)), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 12 * sc), int(cy - 32 * sc)), (int(cx + 12 * sc), int(cy + 22 * sc)), c_w, int(3 * sc), lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 28 * sc), int(cy - 16 * sc)), (int(cx + 28 * sc), int(cy + 6 * sc)), c_w, int(3 * sc), lineType=cv2.LINE_AA)
+            # Pulse
+            pts = np.array([[int(cx - 36 * sc), int(cy + 28 * sc)], [int(cx - 18 * sc), int(cy + 28 * sc)], [int(cx - 9 * sc), int(cy + 14 * sc)], [cx, int(cy + 36 * sc)], [int(cx + 12 * sc), int(cy + 22 * sc)], [int(cx + 36 * sc), int(cy + 28 * sc)]], np.int32)
+            cv2.polylines(target, [pts], False, c_g, int(4 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "facecam_toggle":
-        # Video Camera lens with aperture iris
-        cv2.rectangle(canvas, (cx - 16, cy - 12), (cx + 8, cy + 14), color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx - 4, cy + 1), 7, color_pink, 2, lineType=cv2.LINE_AA)
-        pts = np.array([[cx + 8, cy - 6], [cx + 22, cy - 14], [cx + 22, cy + 16], [cx + 8, cy + 8]], np.int32)
-        cv2.polylines(canvas, [pts], True, color_cyan, 2, lineType=cv2.LINE_AA)
+        elif symbol_id == "clear_wanted":
+            # 5-star police badge with slash
+            pts = []
+            for i in range(10):
+                r = 32 * sc if i % 2 == 0 else 13 * sc
+                angle = i * 36 - 90
+                rad = math.radians(angle)
+                pts.append([int(cx + r * math.cos(rad)), int(cy + r * math.sin(rad))])
+            cv2.fillPoly(target, [np.array(pts, np.int32)], c_g, lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 30 * sc), int(cy + 30 * sc)), (int(cx + 30 * sc), int(cy - 30 * sc)), c_c, int(6 * sc), lineType=cv2.LINE_AA)
 
-    elif symbol_id == "stream_marker":
-        # Flag bookmark with highlight star
-        pts = np.array([[cx - 12, cy - 20], [cx + 12, cy - 20], [cx + 12, cy + 16], [cx, cy + 6], [cx - 12, cy + 16]], np.int32)
-        cv2.polylines(canvas, [pts], True, color_gold, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy - 4), 4, color_white, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "ifruit_phone":
+            # Smartphone with app dots
+            cv2.rectangle(target, (int(cx - 20 * sc), int(cy - 36 * sc)), (int(cx + 20 * sc), int(cy + 36 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 15 * sc), int(cy - 28 * sc)), (int(cx + 15 * sc), int(cy + 24 * sc)), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy + 30 * sc)), int(3 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            for dy in [-18, -6, 6]:
+                for dx in [-7, 7]:
+                    cv2.circle(target, (int((cx + dx) * sc), int((cy + dy) * sc)), int(2 * sc), c_c, -1, lineType=cv2.LINE_AA)
 
-    elif symbol_id == "chat_moderation":
-        # Security shield with neon chat bubble
-        pts = np.array([[cx, cy - 20], [cx + 18, cy - 12], [cx + 14, cy + 12], [cx, cy + 22], [cx - 14, cy + 12], [cx - 18, cy - 12]], np.int32)
-        cv2.polylines(canvas, [pts], True, color_white, 2, lineType=cv2.LINE_AA)
-        cv2.circle(canvas, (cx, cy - 2), 6, color_pink, -1, lineType=cv2.LINE_AA)
+        elif symbol_id == "interaction_menu":
+            # Gear / 'M' Badge
+            cv2.circle(target, (cx, cy), int(26 * sc), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            for angle in range(0, 360, 45):
+                rad = math.radians(angle)
+                x1 = int(cx + 26 * sc * math.cos(rad))
+                y1 = int(cy + 26 * sc * math.sin(rad))
+                x2 = int(cx + 34 * sc * math.cos(rad))
+                y2 = int(cy + 34 * sc * math.sin(rad))
+                cv2.line(target, (x1, y1), (x2, y2), c_g, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.putText(target, "M", (int(cx - 12 * sc), int(cy + 10 * sc)), cv2.FONT_HERSHEY_DUPLEX, 1.0 * sc, c_c, 2, lineType=cv2.LINE_AA)
+
+        elif symbol_id == "gps_waypoint":
+            # Map Pin & Radar Ring
+            cv2.circle(target, (cx, int(cy - 12 * sc)), int(18 * sc), c_m, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy - 12 * sc)), int(7 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            pts = np.array([[int(cx - 14 * sc), int(cy - 4 * sc)], [cx, int(cy + 24 * sc)], [int(cx + 14 * sc), int(cy - 4 * sc)]], np.int32)
+            cv2.fillPoly(target, [pts], c_m, lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (cx, int(cy + 28 * sc)), (int(28 * sc), int(9 * sc)), 0, 0, 360, c_c, int(4 * sc), lineType=cv2.LINE_AA)
+
+        elif symbol_id == "heist_loot":
+            # Heist duffel bag & cash mark
+            cv2.rectangle(target, (int(cx - 30 * sc), int(cy - 12 * sc)), (int(cx + 30 * sc), int(cy + 24 * sc)), c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.ellipse(target, (cx, int(cy - 12 * sc)), (int(18 * sc), int(16 * sc)), 0, 180, 360, c_w, int(5 * sc), lineType=cv2.LINE_AA)
+            cv2.putText(target, "$", (int(cx - 10 * sc), int(cy + 16 * sc)), cv2.FONT_HERSHEY_DUPLEX, 0.9 * sc, c_g, 2, lineType=cv2.LINE_AA)
+
+        elif symbol_id == "cyber_hack":
+            # Cyber skull
+            cv2.circle(target, (cx, int(cy - 8 * sc)), int(22 * sc), c_c, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx - 8 * sc), int(cy - 8 * sc)), int(5 * sc), (20, 10, 24), -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx + 8 * sc), int(cy - 8 * sc)), int(5 * sc), (20, 10, 24), -1, lineType=cv2.LINE_AA)
+            cv2.rectangle(target, (int(cx - 12 * sc), int(cy + 8 * sc)), (int(cx + 12 * sc), int(cy + 24 * sc)), c_c, -1, lineType=cv2.LINE_AA)
+            cv2.line(target, (int(cx - 4 * sc), int(cy + 8 * sc)), (int(cx - 4 * sc), int(cy + 24 * sc)), (20, 10, 24), 2)
+            cv2.line(target, (int(cx + 4 * sc), int(cy + 8 * sc)), (int(cx + 4 * sc), int(cy + 24 * sc)), (20, 10, 24), 2)
+
+        elif symbol_id == "hands_up_rp":
+            # Figure with hands raised in air
+            cv2.circle(target, (cx, int(cy - 20 * sc)), int(11 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.line(target, (cx, int(cy - 9 * sc)), (cx, int(cy + 26 * sc)), c_w, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (cx, cy), (int(cx - 26 * sc), int(cy - 26 * sc)), c_g, int(6 * sc), lineType=cv2.LINE_AA)
+            cv2.line(target, (cx, cy), (int(cx + 26 * sc), int(cy - 26 * sc)), c_g, int(6 * sc), lineType=cv2.LINE_AA)
+
+        elif symbol_id == "mask_bandana":
+            # Heist bandana mask
+            pts = np.array([[int(cx - 30 * sc), int(cy - 18 * sc)], [int(cx + 30 * sc), int(cy - 18 * sc)], [cx, int(cy + 28 * sc)]], np.int32)
+            cv2.fillPoly(target, [pts], c_m, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx - 14 * sc), cy), int(3 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (int(cx + 14 * sc), cy), int(3 * sc), c_w, -1, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, int(cy + 10 * sc)), int(3 * sc), c_w, -1, lineType=cv2.LINE_AA)
+
+        elif symbol_id == "mod_shield":
+            # Security shield
+            pts = np.array([
+                [cx, int(cy - 30 * sc)],
+                [int(cx + 28 * sc), int(cy - 18 * sc)],
+                [int(cx + 22 * sc), int(cy + 18 * sc)],
+                [cx, int(cy + 34 * sc)],
+                [int(cx - 22 * sc), int(cy + 18 * sc)],
+                [int(cx - 28 * sc), int(cy - 18 * sc)]
+            ], np.int32)
+            cv2.fillPoly(target, [pts], c_w, lineType=cv2.LINE_AA)
+            cv2.circle(target, (cx, cy), int(10 * sc), c_m, -1, lineType=cv2.LINE_AA)
+
+    # 1. Render mask for soft neon bloom
+    render_geometry(mask, is_mask=True)
+    mask_blur = cv2.GaussianBlur(mask, (21, 21), 0) / 255.0
+    
+    # 2. Apply neon ambient bloom to canvas
+    canvas[:, :, 0] = np.clip(canvas[:, :, 0].astype(np.float32) + mask_blur * 220, 0, 255).astype(np.uint8) # B
+    canvas[:, :, 1] = np.clip(canvas[:, :, 1].astype(np.float32) + mask_blur * 140, 0, 255).astype(np.uint8) # G
+    canvas[:, :, 2] = np.clip(canvas[:, :, 2].astype(np.float32) + mask_blur * 90, 0, 255).astype(np.uint8)  # R
+    
+    # 3. Draw final crisp geometry on top
+    render_geometry(canvas, is_mask=False)
+    
+    return canvas
+
+# ==============================================================================
+# CATALOG: 48 BOLD ICONS
+# ==============================================================================
+
+ICONS_BOLD = [
+    # --- STREAMING & OBS CONTROL (Matching Ulanzi & OBS References) ---
+    {"id": "STRM-01", "name": "SCENE", "symbol": "scene_switch", "sub": "strm", "file": "01_scene_switch"},
+    {"id": "STRM-02", "name": "RECORD", "symbol": "record", "sub": "strm", "file": "02_record_stream"},
+    {"id": "STRM-03", "name": "STREAM", "symbol": "stream", "sub": "strm", "file": "03_start_stream"},
+    {"id": "STRM-04", "name": "VIRTUAL CAM", "symbol": "virtual_cam", "sub": "strm", "file": "04_virtual_cam"},
+    {"id": "STRM-05", "name": "STUDIO MODE", "symbol": "studio_mode", "sub": "strm", "file": "05_studio_mode"},
+    {"id": "STRM-06", "name": "PLAY", "symbol": "play", "sub": "strm", "file": "06_play_media"},
+    {"id": "STRM-07", "name": "PAUSE", "symbol": "pause", "sub": "strm", "file": "07_pause_media"},
+    {"id": "STRM-08", "name": "PLAY NEXT", "symbol": "play_next", "sub": "strm", "file": "08_play_next"},
+    {"id": "STRM-09", "name": "PLAY PREV", "symbol": "play_prev", "sub": "strm", "file": "09_play_prev"},
+    {"id": "STRM-10", "name": "SKIP ALERT", "symbol": "skip_forward", "sub": "strm", "file": "10_skip_alert"},
+    {"id": "STRM-11", "name": "ALERTS", "symbol": "alert_bell", "sub": "strm", "file": "11_alert_bell"},
+    {"id": "STRM-12", "name": "MUTE ALERTS", "symbol": "alert_mute", "sub": "strm", "file": "12_mute_alerts"},
+    {"id": "STRM-13", "name": "RELOAD OVERLAYS", "symbol": "reload_overlays", "sub": "strm", "file": "13_reload_overlays"},
+    {"id": "STRM-14", "name": "VIEWER REQ", "symbol": "viewer_requests", "sub": "strm", "file": "14_viewer_requests"},
+    {"id": "STRM-15", "name": "WIDGET ON", "symbol": "widget_toggle", "sub": "strm", "file": "15_widget_toggle"},
+    {"id": "STRM-16", "name": "VIDEO ON", "symbol": "video_toggle", "sub": "strm", "file": "16_video_toggle"},
+    {"id": "STRM-17", "name": "VOLUME UP", "symbol": "volume_up", "sub": "strm", "file": "17_volume_up"},
+    {"id": "STRM-18", "name": "VOLUME DOWN", "symbol": "volume_down", "sub": "strm", "file": "18_volume_down"},
+    {"id": "STRM-19", "name": "MUTE AUDIO", "symbol": "volume_mute", "sub": "strm", "file": "19_volume_mute"},
+    {"id": "STRM-20", "name": "SET VOLUME", "symbol": "volume_levels", "sub": "strm", "file": "20_set_volume"},
+    {"id": "STRM-21", "name": "MIC MUTE", "symbol": "mic_mute", "sub": "strm", "file": "21_mic_mute"},
+    {"id": "STRM-22", "name": "DEAFEN", "symbol": "headphone_deafen", "sub": "strm", "file": "22_headphone_deafen"},
+    {"id": "STRM-23", "name": "MOD SHIELD", "symbol": "mod_shield", "sub": "strm", "file": "23_mod_shield"},
+    {"id": "STRM-24", "name": "REPLAY 30S", "symbol": "reload_overlays", "sub": "strm", "file": "24_replay_buffer"},
+
+    # --- GTA VI GAMING & OPERATIONS ---
+    {"id": "GAME-01", "name": "IGNITION", "symbol": "engine_ignition", "sub": "game", "file": "25_engine_ignition"},
+    {"id": "GAME-02", "name": "HIGH BEAMS", "symbol": "headlights_highbeam", "sub": "game", "file": "26_headlights_highbeam"},
+    {"id": "GAME-03", "name": "NITRO BOOST", "symbol": "nitro_boost", "sub": "game", "file": "27_nitro_boost"},
+    {"id": "GAME-04", "name": "DRIFT BRAKE", "symbol": "handbrake_drift", "sub": "game", "file": "28_handbrake_drift"},
+    {"id": "GAME-05", "name": "VICE RADIO", "symbol": "vice_radio", "sub": "game", "file": "29_vice_radio"},
+    {"id": "GAME-06", "name": "CINEMATIC", "symbol": "cinematic_cam", "sub": "game", "file": "30_cinematic_cam"},
+    {"id": "GAME-07", "name": "VTOL / GEAR", "symbol": "vtol_landing_gear", "sub": "game", "file": "31_vtol_landing_gear"},
+    {"id": "GAME-08", "name": "CAR LOCK", "symbol": "vehicle_lock", "sub": "game", "file": "32_vehicle_lock"},
+    {"id": "GAME-09", "name": "WEAPON WHEEL", "symbol": "weapon_wheel", "sub": "game", "file": "33_weapon_wheel"},
+    {"id": "GAME-10", "name": "PISTOL", "symbol": "pistol_sidearm", "sub": "game", "file": "34_pistol_sidearm"},
+    {"id": "GAME-11", "name": "RIFLE", "symbol": "assault_rifle", "sub": "game", "file": "35_assault_rifle"},
+    {"id": "GAME-12", "name": "SNIPER", "symbol": "sniper_scope", "sub": "game", "file": "36_sniper_scope"},
+    {"id": "GAME-13", "name": "STICKY C4", "symbol": "sticky_c4", "sub": "game", "file": "37_sticky_c4"},
+    {"id": "GAME-14", "name": "ARMOR", "symbol": "heavy_armor", "sub": "game", "file": "38_heavy_armor"},
+    {"id": "GAME-15", "name": "SNACK HEAL", "symbol": "snack_heal", "sub": "game", "file": "39_snack_heal"},
+    {"id": "GAME-16", "name": "CLEAR WANTED", "symbol": "clear_wanted", "sub": "game", "file": "40_clear_wanted"},
+    {"id": "GAME-17", "name": "iFRUIT PHONE", "symbol": "ifruit_phone", "sub": "game", "file": "41_ifruit_phone"},
+    {"id": "GAME-18", "name": "MENU (M)", "symbol": "interaction_menu", "sub": "game", "file": "42_interaction_menu"},
+    {"id": "GAME-19", "name": "GPS MAP", "symbol": "gps_waypoint", "sub": "game", "file": "43_gps_waypoint"},
+    {"id": "GAME-20", "name": "HEIST LOOT", "symbol": "heist_loot", "sub": "game", "file": "44_heist_loot"},
+    {"id": "GAME-21", "name": "CYBER HACK", "symbol": "cyber_hack", "sub": "game", "file": "45_cyber_hack"},
+    {"id": "GAME-22", "name": "HANDS UP RP", "symbol": "hands_up_rp", "sub": "game", "file": "46_hands_up_rp"},
+    {"id": "GAME-23", "name": "MASK ON/OFF", "symbol": "mask_bandana", "sub": "game", "file": "47_mask_bandana"},
+    {"id": "GAME-24", "name": "HERO PLAY", "symbol": "play", "sub": "game", "file": "48_hero_play"},
+]
+
+def render_bold_keycap(icon_def):
+    """Renders 186x186 keycap with large bold glyph and high-contrast label."""
+    canvas = create_vice_gradient_keycap(KEY_SIZE, KEY_SIZE)
+    
+    # Check if hero icon or labeled icon
+    is_hero = icon_def["name"] == "HERO PLAY"
+    has_label = not is_hero
+    
+    center = (KEY_SIZE // 2, 72) if has_label else (KEY_SIZE // 2, KEY_SIZE // 2)
+    draw_bold_symbol(canvas, icon_def["symbol"], center=center, has_label=has_label)
+    
+    if has_label:
+        name = icon_def["name"]
+        # Sleek dark label capsule
+        cv2.rectangle(canvas, (12, KEY_SIZE - 36), (KEY_SIZE - 13, KEY_SIZE - 12), (16, 6, 22), -1)
+        cv2.rectangle(canvas, (12, KEY_SIZE - 36), (KEY_SIZE - 13, KEY_SIZE - 12), (90, 20, 140), 1, lineType=cv2.LINE_AA)
+        
+        # High contrast font
+        font_scale = 0.38 if len(name) <= 11 else 0.32
+        (tw, th), _ = cv2.getTextSize(name, cv2.FONT_HERSHEY_DUPLEX, font_scale, 1)
+        tx = (KEY_SIZE - tw) // 2
+        ty = KEY_SIZE - 20
+        
+        cv2.putText(canvas, name, (tx + 1, ty + 1), cv2.FONT_HERSHEY_DUPLEX, font_scale, (0, 0, 0), 2, lineType=cv2.LINE_AA)
+        cv2.putText(canvas, name, (tx, ty), cv2.FONT_HERSHEY_DUPLEX, font_scale, C_WHITE, 1, lineType=cv2.LINE_AA)
         
     return canvas
 
-# ==============================================================================
-# ICON CATALOG DEFINITIONS (40 Icons)
-# ==============================================================================
-
-ICONS = [
-    # 24 GAMING ICONS
-    {"id": "GTA-GAME-01", "name": "ENGINE IGNITION", "symbol": "engine_ignition", "cat": "Vehicle", "sub": "game", "file": "01_engine_ignition"},
-    {"id": "GTA-GAME-02", "name": "HIGH BEAMS", "symbol": "headlights_highbeam", "cat": "Vehicle", "sub": "game", "file": "02_headlights_highbeam"},
-    {"id": "GTA-GAME-03", "name": "NITRO BOOST", "symbol": "nitro_boost", "cat": "Vehicle", "sub": "game", "file": "03_nitro_boost"},
-    {"id": "GTA-GAME-04", "name": "HANDBRAKE DRIFT", "symbol": "handbrake_drift", "cat": "Vehicle", "sub": "game", "file": "04_handbrake_drift"},
-    {"id": "GTA-GAME-05", "name": "VICE RADIO", "symbol": "radio_next", "cat": "Vehicle", "sub": "game", "file": "05_vice_radio"},
-    {"id": "GTA-GAME-06", "name": "CINEMATIC CAM", "symbol": "cinematic_cam", "cat": "Vehicle", "sub": "game", "file": "06_cinematic_cam"},
-    {"id": "GTA-GAME-07", "name": "VTOL / GEAR", "symbol": "vtol_landing_gear", "cat": "Vehicle", "sub": "game", "file": "07_vtol_landing_gear"},
-    {"id": "GTA-GAME-08", "name": "DOOR LOCK", "symbol": "vehicle_lock", "cat": "Vehicle", "sub": "game", "file": "08_vehicle_lock"},
-    {"id": "GTA-GAME-09", "name": "WEAPON WHEEL", "symbol": "weapon_wheel", "cat": "Combat", "sub": "game", "file": "09_weapon_wheel"},
-    {"id": "GTA-GAME-10", "name": "PISTOL SIDEARM", "symbol": "pistol_sidearm", "cat": "Combat", "sub": "game", "file": "10_pistol_sidearm"},
-    {"id": "GTA-GAME-11", "name": "ASSAULT RIFLE", "symbol": "assault_rifle", "cat": "Combat", "sub": "game", "file": "11_assault_rifle"},
-    {"id": "GTA-GAME-12", "name": "SNIPER SCOPE", "symbol": "sniper_scope", "cat": "Combat", "sub": "game", "file": "12_sniper_scope"},
-    {"id": "GTA-GAME-13", "name": "STICKY C4", "symbol": "explosive_c4", "cat": "Combat", "sub": "game", "file": "13_sticky_c4"},
-    {"id": "GTA-GAME-14", "name": "HEAVY ARMOR", "symbol": "armor_vest", "cat": "Combat", "sub": "game", "file": "14_heavy_armor"},
-    {"id": "GTA-GAME-15", "name": "SNACK HEAL", "symbol": "health_snack", "cat": "Combat", "sub": "game", "file": "15_snack_heal"},
-    {"id": "GTA-GAME-16", "name": "CLEAR WANTED", "symbol": "wanted_stars", "cat": "Combat", "sub": "game", "file": "16_clear_wanted"},
-    {"id": "GTA-GAME-17", "name": "iFRUIT PHONE", "symbol": "ifruit_phone", "cat": "Heist & RP", "sub": "game", "file": "17_ifruit_phone"},
-    {"id": "GTA-GAME-18", "name": "MENU (M)", "symbol": "interaction_menu", "cat": "Heist & RP", "sub": "game", "file": "18_interaction_menu"},
-    {"id": "GTA-GAME-19", "name": "GPS WAYPOINT", "symbol": "map_gps_waypoint", "cat": "Heist & RP", "sub": "game", "file": "19_gps_waypoint"},
-    {"id": "GTA-GAME-20", "name": "HEIST LOOT", "symbol": "duffel_bag_loot", "cat": "Heist & RP", "sub": "game", "file": "20_heist_loot"},
-    {"id": "GTA-GAME-21", "name": "CYBER HACK", "symbol": "hack_device", "cat": "Heist & RP", "sub": "game", "file": "21_cyber_hack"},
-    {"id": "GTA-GAME-22", "name": "HANDS UP RP", "symbol": "hands_up_rp", "cat": "Heist & RP", "sub": "game", "file": "22_hands_up_rp"},
-    {"id": "GTA-GAME-23", "name": "MASK ON/OFF", "symbol": "mask_bandana", "cat": "Heist & RP", "sub": "game", "file": "23_mask_bandana"},
-    {"id": "GTA-GAME-24", "name": "CLIP SNAPSHOT", "symbol": "screenshot_snap", "cat": "Heist & RP", "sub": "game", "file": "24_clip_snapshot"},
-
-    # 16 STREAMING ICONS
-    {"id": "GTA-STRM-01", "name": "SCENE STARTING", "symbol": "scene_starting", "cat": "Scenes", "sub": "strm", "file": "25_scene_starting"},
-    {"id": "GTA-STRM-02", "name": "SCENE GAMEPLAY", "symbol": "scene_gameplay", "cat": "Scenes", "sub": "strm", "file": "26_scene_gameplay"},
-    {"id": "GTA-STRM-03", "name": "SCENE CHATTING", "symbol": "scene_chatting", "cat": "Scenes", "sub": "strm", "file": "27_scene_chatting"},
-    {"id": "GTA-STRM-04", "name": "SCENE BRB", "symbol": "scene_brb", "cat": "Scenes", "sub": "strm", "file": "28_scene_brb"},
-    {"id": "GTA-STRM-05", "name": "SCENE ENDING", "symbol": "scene_ending", "cat": "Scenes", "sub": "strm", "file": "29_scene_ending"},
-    {"id": "GTA-STRM-06", "name": "MIC MUTE", "symbol": "mic_toggle", "cat": "Audio", "sub": "strm", "file": "30_mic_mute"},
-    {"id": "GTA-STRM-07", "name": "DEAFEN HEADPHONES", "symbol": "headphone_deafen", "cat": "Audio", "sub": "strm", "file": "31_headphone_deafen"},
-    {"id": "GTA-STRM-08", "name": "DISCORD VOICE", "symbol": "discord_ptt", "cat": "Audio", "sub": "strm", "file": "32_discord_voice"},
-    {"id": "GTA-STRM-09", "name": "MUSIC TRACK", "symbol": "music_spotify", "cat": "Audio", "sub": "strm", "file": "33_music_track"},
-    {"id": "GTA-STRM-10", "name": "SOUNDBOARD", "symbol": "soundboard_sfx", "cat": "Audio", "sub": "strm", "file": "34_soundboard"},
-    {"id": "GTA-STRM-11", "name": "VOICE FX", "symbol": "voice_changer", "cat": "Audio", "sub": "strm", "file": "35_voice_fx"},
-    {"id": "GTA-STRM-12", "name": "GO LIVE / END", "symbol": "start_stop_stream", "cat": "Production", "sub": "strm", "file": "36_go_live"},
-    {"id": "GTA-STRM-13", "name": "REPLAY 30S", "symbol": "record_replay", "cat": "Production", "sub": "strm", "file": "37_replay_30s"},
-    {"id": "GTA-STRM-14", "name": "FACECAM TOGGLE", "symbol": "facecam_toggle", "cat": "Production", "sub": "strm", "file": "38_facecam_toggle"},
-    {"id": "GTA-STRM-15", "name": "HIGHLIGHT MARKER", "symbol": "stream_marker", "cat": "Production", "sub": "strm", "file": "39_highlight_marker"},
-    {"id": "GTA-STRM-16", "name": "MOD SHIELD", "symbol": "chat_moderation", "cat": "Production", "sub": "strm", "file": "40_mod_shield"},
-]
-
-def render_keycap_with_label(icon_def):
-    """Renders full 186x186 keycap with neon glyph and bottom text badge."""
-    canvas = create_vice_gradient_keycap(KEY_SIZE, KEY_SIZE)
-    
-    # Draw Symbol in center
-    draw_symbol_glyph(canvas, icon_def["symbol"], center=(KEY_SIZE//2, 80), scale=1.0)
-    
-    # Label Banner at bottom
-    name = icon_def["name"]
-    # Pill background for label
-    cv2.rectangle(canvas, (14, KEY_SIZE - 36), (KEY_SIZE - 15, KEY_SIZE - 14), (16, 8, 22), -1)
-    cv2.rectangle(canvas, (14, KEY_SIZE - 36), (KEY_SIZE - 15, KEY_SIZE - 14), (80, 24, 140), 1, lineType=cv2.LINE_AA)
-    
-    # Text calculation
-    font_scale = 0.36
-    if len(name) > 13:
-        font_scale = 0.31
-    (tw, th), _ = cv2.getTextSize(name, cv2.FONT_HERSHEY_DUPLEX, font_scale, 1)
-    tx = (KEY_SIZE - tw) // 2
-    ty = KEY_SIZE - 22
-    
-    # Text shadow & bright text
-    cv2.putText(canvas, name, (tx + 1, ty + 1), cv2.FONT_HERSHEY_DUPLEX, font_scale, (0, 0, 0), 2, lineType=cv2.LINE_AA)
-    cv2.putText(canvas, name, (tx, ty), cv2.FONT_HERSHEY_DUPLEX, font_scale, (255, 255, 255), 1, lineType=cv2.LINE_AA)
-    
-    return canvas
-
-def render_transparent_glyph(icon_def):
-    """Renders isolated vector glyph on transparent RGBA canvas."""
+def render_bold_transparent_glyph(icon_def):
+    """Renders large isolated vector glyph on transparent 32-bit RGBA canvas."""
     rgba = np.zeros((KEY_SIZE, KEY_SIZE, 4), dtype=np.uint8)
-    
-    # Draw on temporary RGB
     temp_rgb = np.zeros((KEY_SIZE, KEY_SIZE, 3), dtype=np.uint8)
-    draw_symbol_glyph(temp_rgb, icon_def["symbol"], center=(KEY_SIZE//2, KEY_SIZE//2), scale=1.15)
+    draw_bold_symbol(temp_rgb, icon_def["symbol"], center=(KEY_SIZE//2, KEY_SIZE//2), has_label=False)
     
-    # Calculate mask
     gray = cv2.cvtColor(temp_rgb, cv2.COLOR_BGR2GRAY)
     mask = (gray > 15).astype(np.uint8) * 255
     mask_blur = cv2.GaussianBlur(mask, (3, 3), 0.5)
@@ -574,82 +747,13 @@ def render_transparent_glyph(icon_def):
     rgba[:, :, 3] = mask_blur
     return rgba
 
-# ==============================================================================
-# GTA VI 458x196 WIDGET BACKGROUNDS
-# ==============================================================================
-
-def generate_gta6_telemetry_backgrounds():
-    """Renders 458x196 px system telemetry widget backgrounds in Vice City aesthetic."""
-    w, h = 458, 196
-    bg1 = np.zeros((h, w, 3), dtype=np.uint8)
-    
-    # Vice Sunset Gradient Plate
-    for y in range(h):
-        t = y / float(h)
-        # Indigo -> Magenta -> Sunset Peach
-        if t < 0.55:
-            st = t / 0.55
-            b = int(77 * (1 - st) + 118 * st)
-            g = int(18 * (1 - st) + 34 * st)
-            r = int(45 * (1 - st) + 216 * st)
-        else:
-            st = (t - 0.55) / 0.45
-            b = int(118 * (1 - st) + 68 * st)
-            g = int(34 * (1 - st) + 160 * st)
-            r = int(216 * (1 - st) + 255 * st)
-        bg1[y, :] = (b, g, r)
-        
-    # Darken inner display area so dynamic white text is completely legible
-    inner_mask = np.zeros((h, w), dtype=np.float32)
-    cv2.rectangle(inner_mask, (16, 16), (w - 17, h - 17), 0.82, -1)
-    inner_mask = cv2.GaussianBlur(inner_mask, (7, 7), 0)
-    bg1 = (bg1.astype(np.float32) * (1.0 - inner_mask[:, :, np.newaxis])).astype(np.uint8)
-    
-    # Silhouette palm tree on left & right
-    cv2.ellipse(bg1, (24, h - 10), (35, 75), 25, 180, 300, (14, 6, 18), 3, lineType=cv2.LINE_AA)
-    cv2.ellipse(bg1, (w - 24, h - 10), (35, 75), -25, 240, 360, (14, 6, 18), 3, lineType=cv2.LINE_AA)
-    
-    # Neon Beveled Border
-    cv2.rectangle(bg1, (16, 16), (w - 17, h - 17), (216, 34, 118), 2, lineType=cv2.LINE_AA)
-    cv2.rectangle(bg1, (18, 18), (w - 19, h - 19), (68, 160, 255), 1, lineType=cv2.LINE_AA)
-    
-    # Vertical Dividers between CPU, RAM, GPU
-    for x in [152, 305]:
-        cv2.line(bg1, (x, 32), (x, h - 32), (30, 10, 36), 3, lineType=cv2.LINE_AA)
-        cv2.line(bg1, (x, 36), (x, h - 36), (216, 34, 118), 1, lineType=cv2.LINE_AA)
-        cv2.circle(bg1, (x, 36), 2, (68, 160, 255), -1, lineType=cv2.LINE_AA)
-        cv2.circle(bg1, (x, h - 36), 2, (68, 160, 255), -1, lineType=cv2.LINE_AA)
-        
-    # Top Header: Glowing "VI" Monogram with Vice City lettering
-    cv2.putText(bg1, "VI", (w//2 - 14, 18), cv2.FONT_HERSHEY_DUPLEX, 0.55, (255, 255, 255), 1, lineType=cv2.LINE_AA)
-    cv2.putText(bg1, "VICE CITY TELEMETRY", (w//2 - 68, h - 9), cv2.FONT_HERSHEY_SIMPLEX, 0.30, (68, 160, 255), 1, lineType=cv2.LINE_AA)
-    
-    return bg1
-
-def render_simulated_widget_preview(bg):
-    """Simulates active numbers over background."""
-    sim = bg.copy()
-    cols = [
-        {"val": "8%", "label": "CPU", "cx": 82},
-        {"val": "55%", "label": "RAM", "cx": 229},
-        {"val": "8%", "label": "GPU", "cx": 376}
-    ]
-    for c in cols:
-        cx = c["cx"]
-        cv2.putText(sim, c["val"], (cx - 32, 108), cv2.FONT_HERSHEY_DUPLEX, 1.25, (0, 0, 0), 4, lineType=cv2.LINE_AA)
-        cv2.putText(sim, c["val"], (cx - 32, 108), cv2.FONT_HERSHEY_DUPLEX, 1.25, (255, 255, 255), 2, lineType=cv2.LINE_AA)
-        cv2.putText(sim, c["label"], (cx - 22, 148), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 0), 3, lineType=cv2.LINE_AA)
-        cv2.putText(sim, c["label"], (cx - 22, 148), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (220, 240, 255), 1, lineType=cv2.LINE_AA)
-    return sim
-
 def main():
-    print(f"Generating GTA VI / Vice City Icon Pack ({len(ICONS)} icons)...")
+    print(f"Generating 48 Bold GTA VI / Vice City Pro Icons (Matching Ulanzi & OBS decks)...")
     
-    for icon in ICONS:
+    for icon in ICONS_BOLD:
         sub = icon["sub"]
         file_prefix = icon["file"]
         
-        # Determine directories
         if sub == "game":
             key_dir = DIRS["game_keys"]
             trans_dir = DIRS["game_trans"]
@@ -659,34 +763,19 @@ def main():
             trans_dir = DIRS["strm_trans"]
             hidpi_dir = DIRS["strm_hidpi"]
             
-        # 1. Full Keycap Render (186 x 186 px)
-        keycap = render_keycap_with_label(icon)
+        # 1. Bold Keycap (186x186)
+        keycap = render_bold_keycap(icon)
         cv2.imwrite(os.path.join(key_dir, f"{file_prefix}.png"), keycap)
         
-        # 2. 2x Hi-DPI Render (372 x 372 px)
+        # 2. 2x Hi-DPI (372x372)
         keycap_2x = enhance_2x(keycap)
         cv2.imwrite(os.path.join(hidpi_dir, f"{file_prefix}_2x.png"), keycap_2x)
         
-        # 3. Transparent Glyph
-        glyph = render_transparent_glyph(icon)
+        # 3. Transparent Vector Glyph
+        glyph = render_bold_transparent_glyph(icon)
         cv2.imwrite(os.path.join(trans_dir, f"glyph_{file_prefix}.png"), glyph)
 
-    print("All 40 GTA VI icons successfully rendered at 1x, 2x Hi-DPI, and transparent formats.")
-    
-    # 4. Generate GTA VI 458x196 Telemetry Background
-    print("Generating GTA VI 458x196 System Telemetry Background...")
-    gt6_bg = generate_gta6_telemetry_backgrounds()
-    bg_path = os.path.join(DIRS["widgets"], "01_gta6_vice_sunset_telemetry_458x196.png")
-    cv2.imwrite(bg_path, gt6_bg)
-    
-    # 2x Hi-DPI
-    bg_2x = enhance_2x(gt6_bg)
-    cv2.imwrite(os.path.join(DIRS["widgets_hidpi"], "01_gta6_vice_sunset_telemetry_458x196_2x.png"), bg_2x)
-    
-    # Simulated Preview
-    prev = render_simulated_widget_preview(gt6_bg)
-    cv2.imwrite(os.path.join(DIRS["widgets_prev"], "preview_01_gta6_vice_sunset_telemetry.png"), prev)
-    print("GTA VI widget backgrounds successfully rendered!")
+    print("All 48 Bold GTA VI icons successfully generated with large proportions and neon bloom!")
 
 if __name__ == "__main__":
     main()
