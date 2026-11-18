@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimForge Industrial Stream Deck: Asset Catalog</title>
+  <style>
+    :root {
+      --bg: #0d0f12;
+      --card-bg: #16191f;
+      --border: #262c36;
+      --accent-orange: #ff8c00;
+      --accent-blue: #00bfff;
+      --accent-green: #32cd32;
+      --accent-pink: #ff1493;
+      --text-main: #f0f3f6;
+      --text-muted: #8b949e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 30px;
+      line-height: 1.5;
+    }
+    header {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    h1 {
+      font-size: 26px;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #ff8c00, #ff4500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stats-badge {
+      font-size: 13px;
+      color: var(--accent-orange);
+      background: rgba(255, 140, 0, 0.1);
+      border: 1px solid rgba(255, 140, 0, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: monospace;
+    }
+    .section-title {
+      font-size: 18px;
+      margin: 35px 0 15px 0;
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .overview-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .overview-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-orange);
+    }
+    .preview-box {
+      width: 100%;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0b0e;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .preview-box.checker {
+      background: repeating-conic-gradient(#1a1e24 0% 25%, #0f1216 0% 50%) 50% / 16px 16px;
+    }
+    .preview-box img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .card-meta {
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .download-link {
+      margin-top: auto;
+      font-size: 11px;
+      color: var(--accent-blue);
+      text-decoration: none;
+      padding: 4px 10px;
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+    .download-link:hover {
+      background: rgba(0, 191, 255, 0.15);
+    }
+    .wide-grid {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>SimForge <span>Stream Deck Asset Extraction</span></h1>
+      <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+        Complete marked overview, isolated buttons, icon glyphs, hardware controls, display gauges, and chassis templates.
+      </p>
+    </div>
+    <div class="stats-badge">1417x1110 Master Image | 2x Super-Sampled Hi-DPI Assets</div>
+  </header>
+
+  <!-- Marked Master Images -->
+  <h2 class="section-title">1. Marked & Annotated Stream Deck Panel</h2>
+  <div class="overview-container">
+    <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--accent-orange);">Marked Panel with HUD Legend & Coordinate Mapping</h3>
+    <a href="annotated/marked_panel_with_legend.png" target="_blank">
+      <img src="annotated/marked_panel_with_legend.png" alt="Marked Panel with Legend">
+    </a>
+    <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">
+      Click the image above to open full resolution (2097 x 1110) in a new tab.
+    </p>
+  </div>
+
+  <!-- Keycap Buttons -->
+  <h2 class="section-title">2. Physical Keycap Buttons (1x & 2x Hi-DPI)</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="preview-box"><img src="buttons/01_btn_esc.png" alt="ESC"></div>
+      <div class="card-title">ESC Keycap</div>
+      <div class="card-meta">BTN-01 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/01_btn_esc_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/02_btn_ccrp_off.png" alt="CCRP OFF"></div>
+      <div class="card-title">CCRP OFF Keycap</div>
+      <div class="card-meta">BTN-02 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/02_btn_ccrp_off_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/03_btn_x_weapon.png" alt="X WEAPON"></div>
+      <div class="card-title">X WEAPON Keycap</div>
+      <div class="card-meta">BTN-03 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/03_btn_x_weapon_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/04_btn_empty_slot_1.png" alt="Empty Slot 1"></div>
+      <div class="card-title">Empty Slot 1 (Hazard)</div>
+      <div class="card-meta">BTN-04 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/04_btn_empty_slot_1_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/05_btn_empty_slot_2.png" alt="Empty Slot 2"></div>
+      <div class="card-title">Empty Slot 2 (Hazard)</div>
+      <div class="card-meta">BTN-05 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/05_btn_empty_slot_2_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/06_btn_cover_me.png" alt="COVER ME"></div>
+      <div class="card-title">COVER ME Keycap</div>
+      <div class="card-meta">BTN-06 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/06_btn_cover_me_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/07_btn_attack_him.png" alt="ATTACK HIM"></div>
+      <div class="card-title">ATTACK HIM Keycap</div>
+      <div class="card-meta">BTN-07 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/07_btn_attack_him_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/08_btn_thank.png" alt="THANK"></div>
+      <div class="card-title">THANK Keycap</div>
+      <div class="card-meta">BTN-08 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/08_btn_thank_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/09_btn_smoke.png" alt="SMOKE"></div>
+      <div class="card-title">SMOKE Keycap</div>
+      <div class="card-meta">BTN-09 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/09_btn_smoke_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/10_btn_jetison.png" alt="JETISON"></div>
+      <div class="card-title">JETISON Keycap</div>
+      <div class="card-meta">BTN-10 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/10_btn_jetison_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/11_btn_yes.png" alt="YES"></div>
+      <div class="card-title">YES Keycap</div>
+      <div class="card-meta">BTN-11 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/11_btn_yes_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/12_btn_ctrl_win.png" alt="Ctrl+Win"></div>
+      <div class="card-title">Ctrl+Win Keycap</div>
+      <div class="card-meta">BTN-12 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/12_btn_ctrl_win_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="buttons/13_btn_no.png" alt="NO"></div>
+      <div class="card-title">NO Keycap</div>
+      <div class="card-meta">BTN-13 | 186x186</div>
+      <a class="download-link" href="buttons/high_dpi_2x/13_btn_no_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+  </div>
+
+  <!-- Isolated Glyphs -->
+  <h2 class="section-title">3. Isolated Glowing Icon Glyphs (Transparent RGBA)</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_01_btn_esc.png" alt="ESC Icon"></div>
+      <div class="card-title">ESC Icon Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_01_btn_esc_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_02_btn_ccrp_off.png" alt="CCRP Icon"></div>
+      <div class="card-title">CCRP OFF Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_02_btn_ccrp_off_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_03_btn_x_weapon.png" alt="Weapon Icon"></div>
+      <div class="card-title">X WEAPON Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_03_btn_x_weapon_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_06_btn_cover_me.png" alt="Cover Me Icon"></div>
+      <div class="card-title">COVER ME Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_06_btn_cover_me_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_07_btn_attack_him.png" alt="Attack Him Icon"></div>
+      <div class="card-title">ATTACK HIM Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_07_btn_attack_him_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_08_btn_thank.png" alt="Thank Icon"></div>
+      <div class="card-title">THANK Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_08_btn_thank_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_09_btn_smoke.png" alt="Smoke Icon"></div>
+      <div class="card-title">SMOKE Canister Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_09_btn_smoke_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_10_btn_jetison.png" alt="Jetison Icon"></div>
+      <div class="card-title">JETISON Bomb Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_10_btn_jetison_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_11_btn_yes.png" alt="YES Icon"></div>
+      <div class="card-title">YES Checkmark Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_11_btn_yes_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_12_btn_ctrl_win.png" alt="Ctrl Win Icon"></div>
+      <div class="card-title">Ctrl+Win Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_12_btn_ctrl_win_2x.png" download>Download 2x RGBA</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="icons_isolated/transparent/icon_13_btn_no.png" alt="NO Icon"></div>
+      <div class="card-title">NO Cross Glyph</div>
+      <div class="card-meta">Transparent Alpha</div>
+      <a class="download-link" href="icons_isolated/high_dpi_2x/icon_13_btn_no_2x.png" download>Download 2x RGBA</a>
+    </div>
+  </div>
+
+  <!-- Display Unit & Telemetry -->
+  <h2 class="section-title">4. System Telemetry Display Unit</h2>
+  <div class="grid wide-grid">
+    <div class="card">
+      <div class="preview-box"><img src="display_panel/01_system_display_unit.png" alt="Full Display"></div>
+      <div class="card-title">Complete Telemetry Display Unit</div>
+      <div class="card-meta">DSP-01 | 410x186</div>
+      <a class="download-link" href="display_panel/high_dpi_2x/01_system_display_unit_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="display_panel/02_telemetry_cpu.png" alt="CPU Meter"></div>
+      <div class="card-title">CPU Meter (4% Microchip)</div>
+      <div class="card-meta">DSP-02 | 125x156</div>
+      <a class="download-link" href="display_panel/high_dpi_2x/02_telemetry_cpu_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="display_panel/03_telemetry_ram.png" alt="RAM Meter"></div>
+      <div class="card-title">RAM Meter (30% Module)</div>
+      <div class="card-meta">DSP-03 | 125x156</div>
+      <a class="download-link" href="display_panel/high_dpi_2x/03_telemetry_ram_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="display_panel/04_telemetry_gpu.png" alt="GPU Meter"></div>
+      <div class="card-title">GPU Meter (4% Fan)</div>
+      <div class="card-meta">DSP-04 | 125x156</div>
+      <a class="download-link" href="display_panel/high_dpi_2x/04_telemetry_gpu_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+  </div>
+
+  <!-- Hardware Controls & Knobs -->
+  <h2 class="section-title">5. Hardware Controls, Knobs & Dials</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="preview-box checker"><img src="controls_and_knobs/01_push_button_left_circular.png" alt="Push Button Left"></div>
+      <div class="card-title">Push Button 1 (Left)</div>
+      <div class="card-meta">CTL-01 | Circular Alpha</div>
+      <a class="download-link" href="controls_and_knobs/high_dpi_2x/01_push_button_left_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="controls_and_knobs/02_push_button_mid_left_circular.png" alt="Push Button Mid-Left"></div>
+      <div class="card-title">Push Button 2 (Mid-Left)</div>
+      <div class="card-meta">CTL-02 | Circular Alpha</div>
+      <a class="download-link" href="controls_and_knobs/high_dpi_2x/02_push_button_mid_left_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="controls_and_knobs/03_rotary_knob_1_circular.png" alt="Rotary Knob 1"></div>
+      <div class="card-title">Rotary Knob 1 (Left Dial)</div>
+      <div class="card-meta">CTL-03 | Circular Alpha</div>
+      <a class="download-link" href="controls_and_knobs/high_dpi_2x/03_rotary_knob_1_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="controls_and_knobs/04_rotary_knob_2_circular.png" alt="Rotary Knob 2"></div>
+      <div class="card-title">Rotary Knob 2 (Center Dial)</div>
+      <div class="card-meta">CTL-04 | Circular Alpha</div>
+      <a class="download-link" href="controls_and_knobs/high_dpi_2x/04_rotary_knob_2_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="controls_and_knobs/05_rotary_knob_3_circular.png" alt="Rotary Knob 3"></div>
+      <div class="card-title">Rotary Knob 3 (Right Dial)</div>
+      <div class="card-meta">CTL-05 | Circular Alpha</div>
+      <a class="download-link" href="controls_and_knobs/high_dpi_2x/05_rotary_knob_3_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+  </div>
+
+  <!-- Branding & Header -->
+  <h2 class="section-title">6. Branding & Emblems</h2>
+  <div class="grid wide-grid">
+    <div class="card">
+      <div class="preview-box"><img src="branding/01_simforge_header_full.png" alt="SimForge Full Header"></div>
+      <div class="card-title">SimForge Header Full Banner</div>
+      <div class="card-meta">BRD-01 | 450x120</div>
+      <a class="download-link" href="branding/high_dpi_2x/01_simforge_header_full_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="branding/02_simforge_anvil_badge_circular.png" alt="Anvil Badge"></div>
+      <div class="card-title">Anvil & Hammer Badge</div>
+      <div class="card-meta">BRD-02 | Circular Alpha</div>
+      <a class="download-link" href="branding/high_dpi_2x/02_simforge_anvil_badge_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="branding/03_simforge_wordmark.png" alt="SimForge Wordmark"></div>
+      <div class="card-title">SimForge Typography Wordmark</div>
+      <div class="card-meta">BRD-03 | 305x80</div>
+      <a class="download-link" href="branding/high_dpi_2x/03_simforge_wordmark_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+  </div>
+
+  <!-- Backgrounds & Chassis Templates -->
+  <h2 class="section-title">7. Chassis Backgrounds, Modular Template & Hardware Screws</h2>
+  <div class="grid wide-grid">
+    <div class="card">
+      <div class="preview-box"><img src="backgrounds_and_chassis/10_clean_chassis_modular_template.png" alt="Modular Chassis"></div>
+      <div class="card-title">Modular Clean Chassis Template</div>
+      <div class="card-meta">Custom Stream Deck Template | 1417x1110</div>
+      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/10_clean_chassis_modular_template_2x.png" download>Download 2x Template</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="backgrounds_and_chassis/01_chassis_upper_faceplate.png" alt="Upper Faceplate"></div>
+      <div class="card-title">Upper Chassis Faceplate</div>
+      <div class="card-meta">BKG-01 | 1367x735</div>
+      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/01_chassis_upper_faceplate_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box"><img src="backgrounds_and_chassis/02_chassis_lower_deck.png" alt="Lower Deck"></div>
+      <div class="card-title">Lower Control Deck Plate</div>
+      <div class="card-meta">BKG-02 | 1367x330</div>
+      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/02_chassis_lower_deck_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+    <div class="card">
+      <div class="preview-box checker"><img src="backgrounds_and_chassis/05_bolt_top_left_circular.png" alt="Hex Bolt"></div>
+      <div class="card-title">Industrial Hex Mounting Bolt</div>
+      <div class="card-meta">BKG-05 | Circular Alpha</div>
+      <a class="download-link" href="backgrounds_and_chassis/high_dpi_2x/05_bolt_top_left_2x.png" download>Download 2x Hi-DPI</a>
+    </div>
+  </div>
+</body>
+</html>
