@@ -71,6 +71,11 @@
       border-color: var(--gta-pink);
       color: #ff55a3;
     }
+    .tab-btn.active.tech {
+      background: linear-gradient(135deg, rgba(0, 215, 255, 0.25), rgba(157, 78, 221, 0.15));
+      border-color: #00d7ff;
+      color: #00d7ff;
+    }
     .theme-content {
       display: none;
     }
@@ -88,6 +93,7 @@
     }
     .sim-title { color: var(--sim-orange); }
     .gta-title { color: var(--gta-pink); }
+    .tech-title { color: #00d7ff; }
     .featured-banner {
       border-radius: 8px;
       padding: 20px;
@@ -100,6 +106,10 @@
     .featured-banner.gta {
       background: linear-gradient(135deg, rgba(45, 18, 77, 0.6), rgba(216, 34, 118, 0.15));
       border: 1px solid rgba(216, 34, 118, 0.4);
+    }
+    .featured-banner.tech {
+      background: linear-gradient(135deg, rgba(16, 12, 32, 0.7), rgba(0, 215, 255, 0.15));
+      border: 1px solid rgba(0, 215, 255, 0.4);
     }
     .grid {
       display: grid;
@@ -126,6 +136,7 @@
     }
     .card.sim:hover { border-color: var(--sim-orange); }
     .card.gta:hover { border-color: var(--gta-pink); }
+    .card.tech:hover { border-color: #00d7ff; }
     .preview-box {
       width: 100%;
       height: 140px;
@@ -185,6 +196,11 @@
       background: linear-gradient(135deg, #d82276, #ffa044);
       font-weight: 600;
     }
+    .tech-btn {
+      color: #fff;
+      background: linear-gradient(135deg, #00b4d8, #7209b7);
+      font-weight: 600;
+    }
     .sec-btn {
       color: #8b949e;
       border: 1px solid var(--border);
@@ -220,6 +236,9 @@
     </button>
     <button class="tab-btn sim" onclick="switchTheme('sim')">
       🔥 Theme 1: SimForge Industrial Gaming Channel Theme
+    </button>
+    <button class="tab-btn tech" onclick="switchTheme('tech')">
+      ⚡ Theme 3: Tech Impact Cosmic Suite
     </button>
   </div>
 
@@ -1042,6 +1061,198 @@
     </div>
   </div>
 
+  <!-- ============================================================== -->
+  <!-- THEME 3: TECH IMPACT COSMIC SUITE -->
+  <!-- ============================================================== -->
+  <div id="theme-tech" class="theme-content">
+    <div class="featured-banner tech">
+      <h2 style="font-size: 17px; color: #00d7ff; margin-bottom: 6px;">
+        ⚡ Tech Impact Cosmic Nebula Stream Deck Suite
+      </h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+        Futuristic cosmic nebula theme featuring celestial amber, electric blue, and deep violet radiance. Includes 13 action keycaps, 1024x1024 hero battle-axe emblem, system telemetry display (9% CPU, 56% RAM, 23% GPU), and modular clean deck template.
+      </p>
+      <div class="grid wide-grid">
+        <div class="card tech">
+          <div class="preview-box wide">
+            <img src="themes/tech_impact/annotated/marked_panel_overview.png" alt="Marked Overview">
+          </div>
+          <div class="card-title">Marked Panel Overview</div>
+          <div class="card-meta">1024 x 630 px | Coordinate Mapping & ID Badges</div>
+          <div class="btn-group">
+            <a class="download-link tech-btn" href="themes/tech_impact/annotated/marked_panel_overview.png" download>Download Overview</a>
+            <a class="download-link sec-btn" href="themes/tech_impact/annotated/marked_panel_with_legend.png" target="_blank">Full HUD Legend</a>
+          </div>
+        </div>
+        <div class="card tech">
+          <div class="preview-box wide checker">
+            <img src="themes/tech_impact/branding/05_tech_impact_hero_axe_transparent.png" alt="Hero Battle-Axe">
+          </div>
+          <div class="card-title">Master Hero Battle-Axe Emblem</div>
+          <div class="card-meta">1024 x 1024 px | Isolated Transparent RGBA Alpha</div>
+          <div class="btn-group">
+            <a class="download-link tech-btn" href="themes/tech_impact/branding/04_tech_impact_hero_axe_1024x1024.png" download>1024x1024 Master</a>
+            <a class="download-link sec-btn" href="themes/tech_impact/branding/05_tech_impact_hero_axe_transparent.png" download>Alpha Cutout</a>
+            <a class="download-link sec-btn" href="themes/tech_impact/branding/06_tech_impact_circular_emblem.png" download>Circular Badge</a>
+          </div>
+        </div>
+        <div class="card tech">
+          <div class="preview-box wide">
+            <img src="themes/tech_impact/backgrounds_and_chassis/02_tech_impact_modular_template.png" alt="Modular Template">
+          </div>
+          <div class="card-title">Clean Modular Deck Template</div>
+          <div class="card-meta">1024 x 630 px | Inpainted Keycap Recesses</div>
+          <div class="btn-group">
+            <a class="download-link tech-btn" href="themes/tech_impact/backgrounds_and_chassis/02_tech_impact_modular_template.png" download>Download Template</a>
+            <a class="download-link sec-btn" href="themes/tech_impact/backgrounds_and_chassis/high_dpi_2x/02_tech_impact_modular_template_2x.png" download>2x Hi-DPI</a>
+          </div>
+        </div>
+        <div class="card tech">
+          <div class="preview-box wide">
+            <img src="themes/tech_impact/display_panel/01_telemetry_display_unit.png" alt="Telemetry Display">
+          </div>
+          <div class="card-title">Tech Impact Telemetry Widget</div>
+          <div class="card-meta">Exact Hardware Display | 9% CPU 56% RAM 23% GPU</div>
+          <div class="btn-group">
+            <a class="download-link tech-btn" href="themes/tech_impact/display_panel/01_telemetry_display_unit.png" download>Download Display</a>
+            <a class="download-link sec-btn" href="themes/tech_impact/display_panel/high_dpi_2x/01_telemetry_display_unit_2x.png" download>2x Hi-DPI</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech Impact Action Keycaps -->
+    <h2 class="section-title tech-title">Tech Impact Action Keycaps & Glowing Controls</h2>
+    <div class="grid">
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/00_btn_tech_impact_hero_keycap.png" alt="Hero Keycap"></div>
+        <div class="card-title">Tech Impact Hero Keycap</div>
+        <div class="card-meta">BRD-07 | 186x186 Square Deck</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/00_btn_tech_impact_hero_keycap_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/branding/05_tech_impact_hero_axe_transparent.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/01_btn_save.png" alt="Save"></div>
+        <div class="card-title">Save Keycap</div>
+        <div class="card-meta">BTN-01 | File Operations</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/01_btn_save_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_01_btn_save.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/02_btn_save_as.png" alt="Save As"></div>
+        <div class="card-title">Save As Keycap</div>
+        <div class="card-meta">BTN-02 | File Operations</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/02_btn_save_as_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_02_btn_save_as.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/03_btn_starburst_spark.png" alt="Starburst"></div>
+        <div class="card-title">Radial Starburst Spark</div>
+        <div class="card-meta">BTN-03 | Incandescent Glow</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/03_btn_starburst_spark_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_03_btn_starburst_spark.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/04_btn_chromatic_sparkle.png" alt="Chromatic Sparkle"></div>
+        <div class="card-title">Chromatic AI Sparkle (Gemini)</div>
+        <div class="card-meta">BTN-04 | 4-Point AI Star</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/04_btn_chromatic_sparkle_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_04_btn_chromatic_sparkle.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/05_btn_gradient_wave_arc.png" alt="Gradient Wave"></div>
+        <div class="card-title">Gradient Sine Wave / Arc</div>
+        <div class="card-meta">BTN-05 | Neon Sine Curve</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/05_btn_gradient_wave_arc_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_05_btn_gradient_wave_arc.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/06_btn_tab.png" alt="Tab Navigation"></div>
+        <div class="card-title">Tab Navigation</div>
+        <div class="card-meta">BTN-06 | Browser / Windows</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/06_btn_tab_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_06_btn_tab.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/07_btn_backspace.png" alt="Backspace"></div>
+        <div class="card-title">Backspace Keycap</div>
+        <div class="card-meta">BTN-07 | Editing Key</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/07_btn_backspace_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_07_btn_backspace.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/08_btn_chatgpt_swirl.png" alt="ChatGPT Swirl"></div>
+        <div class="card-title">ChatGPT / AI Swirl</div>
+        <div class="card-meta">BTN-08 | OpenAI Swirl</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/08_btn_chatgpt_swirl_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_08_btn_chatgpt_swirl.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/09_btn_copilot_avatar.png" alt="Copilot Avatar"></div>
+        <div class="card-title">Copilot / AI Robot Avatar</div>
+        <div class="card-meta">BTN-09 | AI Assistant</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/09_btn_copilot_avatar_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_09_btn_copilot_avatar.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/10_btn_crystal_cube.png" alt="Crystal Cube"></div>
+        <div class="card-title">Crystal Isometric Cube</div>
+        <div class="card-meta">BTN-10 | 3D Hexahedron</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/10_btn_crystal_cube_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_10_btn_crystal_cube.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/11_btn_num_enter.png" alt="Num Enter"></div>
+        <div class="card-title">Num Enter Keycap</div>
+        <div class="card-meta">BTN-11 | Numpad Return</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/11_btn_num_enter_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_11_btn_num_enter.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/12_btn_ctrl_win.png" alt="Ctrl+Win Macro"></div>
+        <div class="card-title">Ctrl+Win Macro</div>
+        <div class="card-meta">BTN-12 | Windows Combo</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/12_btn_ctrl_win_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_12_btn_ctrl_win.png" download>RGBA</a>
+        </div>
+      </div>
+      <div class="card tech">
+        <div class="preview-box"><img src="themes/tech_impact/buttons/13_btn_win.png" alt="Windows Key"></div>
+        <div class="card-title">Windows Key</div>
+        <div class="card-meta">BTN-13 | OS Key</div>
+        <div class="btn-group">
+          <a class="download-link tech-btn" href="themes/tech_impact/buttons/high_dpi_2x/13_btn_win_2x.png" download>2x Keycap</a>
+          <a class="download-link sec-btn" href="themes/tech_impact/icons_isolated/transparent/icon_13_btn_win.png" download>RGBA</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     function switchTheme(theme) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1050,9 +1261,12 @@
       if (theme === 'gta') {
         document.querySelector('.tab-btn.gta').classList.add('active');
         document.getElementById('theme-gta').classList.add('active');
-      } else {
+      } else if (theme === 'sim') {
         document.querySelector('.tab-btn.sim').classList.add('active');
         document.getElementById('theme-sim').classList.add('active');
+      } else if (theme === 'tech') {
+        document.querySelector('.tab-btn.tech').classList.add('active');
+        document.getElementById('theme-tech').classList.add('active');
       }
     }
   </script>
