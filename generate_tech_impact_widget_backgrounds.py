@@ -19,6 +19,7 @@ MIRROR_OUTPUT_DIR = os.path.join(MIRROR_THEME_DIR, "widget_backgrounds")
 DISPLAY_PATH = os.path.join(THEME_DIR, "display_panel", "01_telemetry_display_unit.png")
 HEADER_BANNER_PATH = os.path.join(THEME_DIR, "branding", "01_tech_impact_header_banner.png")
 HEADER_EMBLEM_PATH = os.path.join(THEME_DIR, "branding", "02_tech_impact_header_emblem.png")
+HERO_LOGO_PATH = os.path.join(THEME_DIR, "branding", "04_tech_impact_hero_axe_1024x1024.png")
 NEBULA_TL_PATH = os.path.join(THEME_DIR, "backgrounds_and_chassis", "04_cosmic_nebula_texture_tl.png")
 NEBULA_TR_PATH = os.path.join(THEME_DIR, "backgrounds_and_chassis", "05_deep_space_blue_nebula_tr.png")
 NEBULA_BL_PATH = os.path.join(THEME_DIR, "backgrounds_and_chassis", "06_cosmic_amber_plasma_bl.png")
@@ -416,13 +417,59 @@ def draw_crisp_text_pil(img_bgr, text, center_x, center_y, font_size=10, color_r
     return cv2.cvtColor(np.array(composed), cv2.COLOR_RGB2BGR)
 
 
-def generate_variant_1_cosmic_fire_metal(neb_tl, neb_tr, neb_bl, emblem_bgr):
+def composite_hero_battle_axe_logo(canvas_bgr, hero_bgr, cx, top_y=14, target_h=46):
+    """Tightly crop, downscale, sharpen, and seamlessly blend the 1024x1024 Tech Impact battle-axe logo."""
+    crop = hero_bgr[14:1014, 64:984]
+    ch, cw = crop.shape[:2]
+    tw = max(1, int(round(cw * (float(target_h) / float(ch)))))
+    small = cv2.resize(crop, (tw, target_h), interpolation=cv2.INTER_AREA).astype(np.float32)
+    sharp = np.clip(small * 1.22 - cv2.GaussianBlur(small, (0, 0), sigmaX=0.7) * 0.22, 0.0, 255.0)
+
+    fx = np.ones(tw, dtype=np.float32)
+    fy = np.ones(target_h, dtype=np.float32)
+    ef = min(5, tw // 4, target_h // 4)
+    if ef > 0:
+        ramp = np.linspace(0.0, 1.0, ef, dtype=np.float32)
+        fx[:ef] = ramp
+        fx[-ef:] = ramp[::-1]
+        fy[:ef] = ramp
+        fy[-ef:] = ramp[::-1]
+    box_fade = np.outer(fy, fx)
+
+    lum = sharp.max(axis=2)
+    alpha = np.clip((lum - 12.0) / 55.0, 0.0, 1.0) * box_fade
+
+    x1 = int(round(cx - tw * 0.5))
+    y1 = int(round(top_y))
+    x2 = x1 + tw
+    y2 = y1 + target_h
+
+    cx1, cy1 = max(0, x1), max(0, y1)
+    cx2, cy2 = min(TARGET_W, x2), min(TARGET_H, y2)
+    if cx2 <= cx1 or cy2 <= cy1:
+        return canvas_bgr
+
+    ax1, ay1 = cx1 - x1, cy1 - y1
+    ax2, ay2 = ax1 + (cx2 - cx1), ay1 + (cy2 - cy1)
+
+    fg_patch = sharp[ay1:ay2, ax1:ax2]
+    a_patch = alpha[ay1:ay2, ax1:ax2][:, :, None]
+    bf_patch = box_fade[ay1:ay2, ax1:ax2][:, :, None]
+    out = canvas_bgr.astype(np.float32)
+    roi = out[cy1:cy2, cx1:cx2]
+
+    blended = roi * (1.0 - a_patch) + fg_patch * a_patch + (1.0 - roi / 255.0) * fg_patch * 0.35 * bf_patch
+    out[cy1:cy2, cx1:cx2] = np.clip(blended, 0, 255)
+    return out.astype(np.uint8)
+
+
+def generate_variant_1_cosmic_fire_metal(neb_tl, neb_tr, neb_bl, hero_logo_bgr):
     """Variant 1: Featured Cosmic Plasma & Fire-Metal Edition."""
     img = create_cosmic_alloy_base(neb_tl, neb_tr, neb_bl, nebula_strength=0.45)
     img = draw_cosmic_fire_metal_bezel(img, fire_weight=1.12, blue_weight=1.05, include_sparks=True)
-    img = draw_flanking_lines(img, TARGET_W // 2, 31, inner_gap=26, outer_x=42)
-    img = composite_glowing_asset(img, emblem_bgr, TARGET_W // 2, top_y=15, target_h=34, edge_feather=7, boost=1.18)
-    img = draw_cosmic_dividers(img, DIVIDER_XS, y1=56, y2=156, intensity=0.88)
+    img = draw_flanking_lines(img, TARGET_W // 2, 36, inner_gap=32, outer_x=42)
+    img = composite_hero_battle_axe_logo(img, hero_logo_bgr, TARGET_W // 2, top_y=14, target_h=46)
+    img = draw_cosmic_dividers(img, DIVIDER_XS, y1=62, y2=156, intensity=0.88)
     img = draw_crisp_text_pil(img, "TECH IMPACT", TARGET_W // 2, 171, font_size=9, color_rgb=(255, 200, 125), alpha=0.85, letter_spacing=3)
     return img
 
@@ -595,6 +642,7 @@ def main():
     orig_disp = cv2.imread(DISPLAY_PATH)
     banner = cv2.imread(HEADER_BANNER_PATH)
     emblem = cv2.imread(HEADER_EMBLEM_PATH)
+    hero_logo = cv2.imread(HERO_LOGO_PATH)
     neb_tl = cv2.imread(NEBULA_TL_PATH)
     neb_tr = cv2.imread(NEBULA_TR_PATH)
     neb_bl = cv2.imread(NEBULA_BL_PATH)
@@ -604,6 +652,7 @@ def main():
             (DISPLAY_PATH, orig_disp),
             (HEADER_BANNER_PATH, banner),
             (HEADER_EMBLEM_PATH, emblem),
+            (HERO_LOGO_PATH, hero_logo),
             (NEBULA_TL_PATH, neb_tl),
             (NEBULA_TR_PATH, neb_tr),
             (NEBULA_BL_PATH, neb_bl),
@@ -613,7 +662,7 @@ def main():
         raise FileNotFoundError(f"Missing required Tech Impact source assets: {missing}")
 
     variants = [
-        ("01_tech_impact_cosmic_fire_metal_458x196", generate_variant_1_cosmic_fire_metal(neb_tl, neb_tr, neb_bl, emblem)),
+        ("01_tech_impact_cosmic_fire_metal_458x196", generate_variant_1_cosmic_fire_metal(neb_tl, neb_tr, neb_bl, hero_logo)),
         ("02_tech_impact_brand_banner_458x196", generate_variant_2_brand_banner(neb_tl, neb_tr, neb_bl, banner)),
         ("03_tech_impact_hardware_icons_458x196", generate_variant_3_hardware_icons(neb_tl, neb_tr, neb_bl, emblem)),
         ("04_tech_impact_clean_fire_bezel_458x196", generate_variant_4_clean_fire_bezel(neb_tl, neb_tr, neb_bl)),

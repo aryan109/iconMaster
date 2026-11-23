@@ -164,6 +164,11 @@
 - Updated output/index.html Theme 3 (#theme-tech) with a featured 458 x 196 Tech Impact Cosmic Fire-Metal Widget Backgrounds gallery section containing Download 458x196, 2x Hi-DPI, and Simulated Live buttons for all 5 variants.
 - Visually inspected all standard renders and simulated previews and verified all HTML asset links and dimensions programmatically.
 
+## Tech Impact Widget Variant 1 Hero Battle-Axe Logo Update
+- Updated generate_tech_impact_widget_backgrounds.py with composite_hero_battle_axe_logo() to crop, INTER_AREA downscale, sharpen, and seamlessly luminance-blend the exact 1024x1024 Tech Impact hero battle-axe 'T' logo (output/themes/tech_impact/branding/04_tech_impact_hero_axe_1024x1024.png) into 01_tech_impact_cosmic_fire_metal_458x196.png at top_y=14, target_h=46, with aligned cyan/amber hairlines (y=36) and clean clearance above live metric numbers (dividers y=62..156).
+- Regenerated Variant 1 (458x196), 2x Hi-DPI (916x392), simulated live preview, and mirrored outputs under output/themes/Tech Impact/widget_backgrounds/, updated Variant 1's card metadata in output/index.html, and visually inspected all regenerated outputs.
+
+
 
 
 
