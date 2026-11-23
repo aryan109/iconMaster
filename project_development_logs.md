@@ -135,6 +135,24 @@
 - Saved all assets into output/themes/tech_impact/ and mirrored to output/themes/Tech Impact/.
 - Upgraded interactive HTML asset catalog (output/index.html) with a dedicated Theme 3: Tech Impact tab, showcase banner, preview cards, and single-click download actions.
 
+## Pixel-Accurate Coordinate Recalibration & Quality Rebuild (SimForge Studio 15-Key & Tech Impact)
+- Re-analyzed pixel intensity and bevel geometry across both master panels (SimForge Stream Deck Studio 15-Key at 1024x616 px and Tech Impact Stream Deck Panel at 1024x630 px) after identifying horizontal grid drift and vertical row-offset clipping in earlier crops.
+- Updated process_simforge_studio_deck.py with individually pixel-verified bounding boxes for all 31 elements:
+  - Fixed vertical origin and variable column alignment across Row 1 (BTN-16 through BTN-20), Row 2 (BTN-21 through BTN-25), and Row 3 (BTN-26 Flight, BTN-27 Ctrl+Win at x=262..414).
+  - Corrected the central SimForge Anvil Emblem circle coordinates to [523, 436] with radius 66 px and mounting plate [447, 363, 599, 511].
+  - Recalibrated Studio Telemetry Display Unit [624, 364, 972, 510] and exact sub-meter dividers (x=748, x=854) for CPU 5%, RAM 54%, and GPU 7%.
+  - Fixed coordinates for the chiseled SimForge wordmark, hazard chevrons, side cooling vents, and 4 corner bolts.
+- Updated process_tech_impact_panel.py with individually pixel-verified bounding boxes for all 26 elements:
+  - Corrected vertical row coordinates (Row 1 at y=101..233, Row 2 at y=249..382, Row 3 at y=398..531), eliminating top/bottom glyph and label clipping across all 13 action keycaps.
+  - Recalibrated Telemetry Display Unit [604, 396, 926, 532] and dividers (x=714, x=816), Header 'T' Emblem, TECH IMPACT Wordmark, and Outer Glowing Neon Frame [8, 78, 1016, 603].
+- Upgraded rendering and isolation pipelines in both scripts:
+  - True-Square Stream Deck Keycaps: Replaced letterbox-padded crops with undistorted 1:1 square crops centered on each button and Lanczos4 super-sampled to 186x186 px (_sq186.png) and 372x372 px (_sq372.png).
+  - Bezel-Free Transparent Glyph Isolation: Implemented asymmetric top/bottom rounded interior masks, border-connected flare pruning, outer-corner speck filtering, per-element overrides (solid jet body fill on BTN-26 Flight, dark pill eyes and crystal facet fill on BTN-09 Copilot and BTN-10 Cube, amber corner drop on BTN-05 Wave Arc), and tight glow halos.
+  - Spotless Modular Deck Templates: Replaced naive thresholding with feathered forged-steel (SimForge) and deep cosmic navy-indigo (Tech Impact) interior gradients, eliminating all ghost text and border slivers while keeping 100% of real metallic and neon keycap bezels intact.
+  - Annotated Overviews & Unclipped HUD Legends: Removed pill overlaps by placing telemetry sub-meter tags below the display frame, clamped all edge labels inside canvas bounds, and dynamically sized legend canvas height so all element rows render cleanly.
+- Verified all regenerated marked overviews, HUD legends, keycaps, transparent glyphs, modular templates, and 306 links in output/index.html visually and programmatically with zero missing files.
+
+
 
 
 
