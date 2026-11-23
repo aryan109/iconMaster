@@ -67,6 +67,7 @@
   - 24 GTA VI Gaming & In-Game Operations Icons: Engine ignition, high beams, nitro boost, drift brake, Vice radio, cinematic cam, VTOL gear, car lock, weapon wheel, pistol, assault rifle, sniper, sticky C4, heavy armor, snack heal, clear wanted, iFruit phone, menu (M), GPS map, heist loot, cyber hack, hands up RP, mask on/off, and hero play.
 - Generated all 48 icons across 3 formats: 1x Keycaps (186x186 px), 2x Hi-DPI Keycaps (372x372 px), and Transparent 32-bit RGBA Vector Glyphs.
 - Updated GTA6_ICON_PACK_GUIDE.md and output/themes/gta6_vice/README.md with full mapping, use cases, and hardware ergonomics.
+
 ## SimForge Fire Metal OBS Record Pause Suite & Dual-State Hardware Integration
 - Engineered generate_simforge_record_pause.py to create the official SimForge Fire Metal edition of the OBS Studio: Record Pause action based on user hardware reference.
 - Modeled the authentic OBS Studio dual-state streaming behavior:
@@ -82,6 +83,30 @@
   - Transparent Glyphs (32-bit RGBA): Isolated transparent vector graphics for software deck customization.
 - Extended dual-state Record Pause and Record Active to the GTA VI / Vice City theme (icons 49 and 50) with Electric Cyan, Hot Magenta, and Vice City Sunset styling.
 - Updated interactive HTML asset catalog (output/index.html) with the new SimForge and GTA VI buttons, preview cards, and direct download links.
+
+## SimForge Studio 15-Key Stream Deck Extraction & High-Precision Processing
+- Integrated new user source image: SimForge Stream Deck Studio 15-Key (1024x616 px master resolution).
+- Created process_simforge_studio_deck.py pipeline for automatic detection, coordinate mapping, marking, and asset rendering:
+  - Mapped 12 physical action keycaps across 3 rows and 5 columns:
+    - Row 1: Tab Navigation (BTN-16), TrackIR / Sensor Nodes with green LEDs (BTN-17), Scene Dual Window (BTN-18), Studio Mode Monitor Chart (BTN-19), Video Cam Toggle (BTN-20).
+    - Row 2: OBS Studio Swirl (BTN-21), Backspace (BTN-22), Media Play (BTN-23), Media Pause (BTN-24), Replay Buffer (BTN-25).
+    - Row 3: Combat Flight Simulation Badge (BTN-26), Ctrl+Win Macro (BTN-27).
+  - Mapped central industrial mounting plate and circular SimForge Anvil & Hammer badge (EMB-01, EMB-02).
+  - Mapped hardware telemetry display unit (DSP-05) and individual meters: CPU Meter 5% (MET-04), RAM Meter 54% (MET-05), GPU Meter 7% (MET-06).
+  - Mapped branding elements: SimForge Chiseled Wordmark (BRD-04) and Bottom Deck Control Strip (BRD-05).
+  - Mapped chassis components: Studio Chassis Full Faceplate (BKG-10), Clean Modular Deck Template (BKG-11), 4 Hazard Chevrons and Side Vents (BKG-12 through BKG-15), 4 Corner Hex Bolts (BKG-16 through BKG-19), and Brushed Forged Metal Texture Tile (BKG-20).
+- Generated annotated master visual overview images:
+  - marked_panel_overview.png: Overlay with category-colored bounding boxes, semi-transparent fills, and contrast ID pill callouts.
+  - marked_panel_with_legend.png: Expanded canvas (1804x780 px) with high-tech HUD coordinate matrix, category chips, and exact bounding box telemetry.
+- Rendered multi-tier production quality exports:
+  - Standard Keycaps: 1x native crops and standardized 186x186 px square Stream Deck format keycaps.
+  - High-DPI 2x Super-Sampled: Super-sampled using Lanczos4 interpolation and unsharp masking for 4K and Retina displays.
+  - Isolated Transparent Glyphs: 32-bit RGBA channel isolates preserving the molten orange, amber, and green luminescence over alpha transparency, alongside dark slate composite backups.
+  - Circular Alpha Extraction: Anti-aliased alpha mask for the circular SimForge Anvil emblem.
+  - Clean Modular Deck Template: Inpainted blank keycap recesses for custom profile assembly.
+- Saved all assets into output/themes/simforge/ with complete mirror in general output/.
+- Updated interactive HTML asset catalog (output/index.html) with a dedicated Studio 15-Key showcase banner, visual inspection cards, and single-click download actions.
+
 
 
 
